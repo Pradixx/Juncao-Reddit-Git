@@ -1,4 +1,4 @@
-package com.digitodael.redgit.infrastructure.security;
+package com.digitodael.redgit.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
