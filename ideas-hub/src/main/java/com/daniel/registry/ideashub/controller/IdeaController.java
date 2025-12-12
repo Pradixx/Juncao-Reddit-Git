@@ -34,6 +34,11 @@ public class IdeaController {
         return ResponseEntity.ok(ideaService.findById(id));
     }
 
+    @GetMapping("/author/{authorId}")
+    public ResponseEntity<List<Idea>> getIdeasByAuthor(@PathVariable String authorId){
+        return ResponseEntity.ok(ideaService.getIdeasByAuthor(authorId));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Idea> replaceIdea(@PathVariable String id,
                                             @Validated @RequestBody IdeaDTO ideaDTO) {
@@ -49,7 +54,7 @@ public class IdeaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletIdea(@PathVariable String id){
+    public ResponseEntity<Void> deleteIdea(@PathVariable String id){
         ideaService.deleteIdeaById(id);
         return ResponseEntity.noContent().build();
     }

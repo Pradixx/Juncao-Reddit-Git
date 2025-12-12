@@ -34,12 +34,15 @@ public class IdeaService {
         );
     }
 
+    public List<Idea> getIdeasByAuthor(String authorId){
+        return ideaRepository.findByAuthorId(authorId);
+    }
+
     public Idea replaceIdea(String id, IdeaDTO ideaDTO){
         Idea existing = findById(id);
 
         existing.setTitle(ideaDTO.getTitle());
         existing.setDescription(ideaDTO.getDescription());
-        existing.setAuthorId(ideaDTO.getAuthorId());
 
         return ideaRepository.save(existing);
     }
@@ -52,9 +55,6 @@ public class IdeaService {
 
         if (ideaDTO.getDescription() != null)
             existing.setDescription(ideaDTO.getDescription());
-
-        if (ideaDTO.getAuthorId() != null)
-            existing.setAuthorId(ideaDTO.getAuthorId());
 
         return ideaRepository.save(existing);
     }

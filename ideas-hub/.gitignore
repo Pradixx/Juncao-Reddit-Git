@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ## EXTRA ##
-src/main/resources/mongo.properties
+src/main/resources/application-mongo.properties
