@@ -2,6 +2,7 @@ package com.digitodael.redgit.infrastructure.security;
 
 import com.digitodael.redgit.infrastructure.entity.User;
 import com.digitodael.redgit.infrastructure.repository.UserRepository;
+import com.digitodael.redgit.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -5,7 +5,7 @@ import com.digitodael.redgit.controllers.DTO.RegisterRequestDTO;
 import com.digitodael.redgit.controllers.DTO.ResponseDTO;
 import com.digitodael.redgit.infrastructure.entity.User;
 import com.digitodael.redgit.infrastructure.repository.UserRepository;
-import com.digitodael.redgit.infrastructure.security.TokenService;
+import com.digitodael.redgit.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
