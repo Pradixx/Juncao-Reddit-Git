@@ -6,6 +6,7 @@ import com.daniel.registry.ideashub.infrastructure.repository.IdeaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,30 +19,46 @@ public class IdeaService {
         Idea idea = new Idea();
         idea.setTitle(ideaDTO.getTitle());
         idea.setDescription(ideaDTO.getDescription());
-        idea.setAuthorId(idea.getAuthorId());
-        idea.setCreatedAt(idea.getCreatedAt());
+        idea.setAuthorId(ideaDTO.getAuthorId());
+        idea.setCreatedAt(LocalDateTime.now());
         return ideaRepository.save(idea);
     }
+
     public List<Idea> getAllIdeas(){
         return ideaRepository.findAll();
     }
+
     public Idea findById(String id){
         return ideaRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("id não encontrado")
         );
     }
+
     public Idea replaceIdea(String id, IdeaDTO ideaDTO){
         Idea existing = findById(id);
+
         existing.setTitle(ideaDTO.getTitle());
         existing.setDescription(ideaDTO.getDescription());
+        existing.setAuthorId(ideaDTO.getAuthorId());
+
         return ideaRepository.save(existing);
     }
+
     public Idea updateIdea(String id, IdeaDTO ideaDTO) {
         Idea existing = findById(id);
-        if (ideaDTO.getTitle() != null) existing.setTitle(ideaDTO.getTitle());
-        if (ideaDTO.getDescription() != null) existing.setDescription(ideaDTO.getDescription());
+
+        if (ideaDTO.getTitle() != null)
+            existing.setTitle(ideaDTO.getTitle());
+
+        if (ideaDTO.getDescription() != null)
+            existing.setDescription(ideaDTO.getDescription());
+
+        if (ideaDTO.getAuthorId() != null)
+            existing.setAuthorId(ideaDTO.getAuthorId());
+
         return ideaRepository.save(existing);
     }
+
     public void deleteIdeaById(String id) {
         ideaRepository.deleteById(id);
     }
