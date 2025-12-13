@@ -2,22 +2,27 @@ package com.daniel.registry.ideashub.config;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoClients;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import com.mongodb.client.MongoClients;
 
 @Configuration
 public class MongoConfig {
 
-    private static final String URI = "mongodb+srv://DaeL:yFpIohoAEX8aeb4O@project-ideas-cluster.dcrxch1.mongodb.net/ideas-db?retryWrites=true&w=majority&appName=project-ideas-cluster";
+    @Value("${spring.data.mongodb.uri}")
+    private String uri;
+
+    @Value("${spring.data.mongodb.database}")
+    private String database;
 
     @Bean
     public MongoTemplate mongoTemplate() {
-        ConnectionString connectionString = new ConnectionString(URI);
+        ConnectionString connectionString = new ConnectionString(uri);
         MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();
-        return new MongoTemplate(MongoClients.create(mongoClientSettings), "ideas-db");
+        return new MongoTemplate(MongoClients.create(mongoClientSettings), database);
     }
 }
