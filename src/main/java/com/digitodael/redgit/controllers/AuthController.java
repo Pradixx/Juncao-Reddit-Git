@@ -6,6 +6,7 @@ import com.digitodael.redgit.controllers.DTO.ResponseDTO;
 import com.digitodael.redgit.infrastructure.entity.User;
 import com.digitodael.redgit.infrastructure.repository.UserRepository;
 import com.digitodael.redgit.service.TokenService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDTO body){
+    public ResponseEntity login(@RequestBody @Valid LoginRequestDTO body){
         User user = this.repository.findByEmail(body.email()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não identificado"));
 
         if(passwordEncoder.matches(body.password(), user.getPassword())) {
@@ -38,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterRequestDTO body){
+    public ResponseEntity register(@RequestBody @Valid RegisterRequestDTO body){
         Optional<User> user = this.repository.findByEmail(body.email());
 
         if(user.isEmpty()) {
