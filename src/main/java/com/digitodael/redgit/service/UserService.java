@@ -159,9 +159,6 @@ public User findById(UUID id) {
     }
 
     public long countByRole(UserRole role) {
-        // Você precisará adicionar esse método no UserRepository
-        return userRepository.findAll().stream()
-                .filter(user -> user.getRole() == role)
-                .count();
+        return userRepository.findByRole(role).size();
     }
 }
