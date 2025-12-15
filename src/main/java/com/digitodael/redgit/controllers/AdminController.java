@@ -1,5 +1,6 @@
 package com.digitodael.redgit.controllers;
 
+import com.digitodael.redgit.controllers.DTO.AdminStatsDTO;
 import com.digitodael.redgit.controllers.DTO.UserDTO;
 import com.digitodael.redgit.controllers.DTO.ChangeRoleDTO;
 import com.digitodael.redgit.infrastructure.entity.User;
@@ -30,6 +31,12 @@ public class AdminController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id) {
+        User user = userService.findById(id);
+        return ResponseEntity.ok(new UserDTO(user));
+    }
+
     @PutMapping("/users/{id}/role")
     public ResponseEntity<UserDTO> changeUserRole(
             @PathVariable UUID id,
@@ -54,5 +61,26 @@ public class AdminController {
     public ResponseEntity<Void> unlockUser(@PathVariable UUID id) {
         userService.unlockAccount(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/users/{id}/disable")
+    public ResponseEntity<Void> disableUser(@PathVariable UUID id) {
+        userService.disableAccount(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/users/{id}/enable")
+    public ResponseEntity<Void> enableUser(@PathVariable UUID id) {
+        userService.enableAccount(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<AdminStatsDTO> getStats() {
+        AdminStatsDTO stats = new AdminStatsDTO();
+        stats.setTotalUsers(userService.countUsers());
+        stats.setTotalAdmins(userService.countByRole(com.digitodael.redgit.infrastructure.entity.UserRole.ADMIN));
+        stats.setTotalRegularUsers(userService.countByRole(com.digitodael.redgit.infrastructure.entity.UserRole.USER));
+        return ResponseEntity.ok(stats);
     }
 }

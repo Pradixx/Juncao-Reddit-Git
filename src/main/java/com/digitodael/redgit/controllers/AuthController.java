@@ -4,6 +4,7 @@ import com.digitodael.redgit.controllers.DTO.LoginRequestDTO;
 import com.digitodael.redgit.controllers.DTO.RegisterRequestDTO;
 import com.digitodael.redgit.controllers.DTO.ResponseDTO;
 import com.digitodael.redgit.infrastructure.entity.User;
+import com.digitodael.redgit.infrastructure.entity.UserRole;
 import com.digitodael.redgit.infrastructure.repository.UserRepository;
 import com.digitodael.redgit.service.TokenService;
 import jakarta.validation.Valid;
@@ -28,8 +29,12 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid LoginRequestDTO body){
-        User user = this.repository.findByEmail(body.email()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não identificado"));
+    public ResponseEntity<ResponseDTO> login(@RequestBody @Valid LoginRequestDTO body){
+        User user = this.repository.findByEmail(body.email())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Usuário não identificado"
+                ));
 
         if(passwordEncoder.matches(body.password(), user.getPassword())) {
             String token = this.tokenService.generateToken(user);
@@ -39,18 +44,41 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterRequestDTO body){
-        Optional<User> user = this.repository.findByEmail(body.email());
+    public ResponseEntity<ResponseDTO> register(@RequestBody @Valid RegisterRequestDTO body){
+        Optional<User> existingUser = this.repository.findByEmail(body.email());
 
-        if(user.isEmpty()) {
+        if(existingUser.isEmpty()) {
             User newUser = new User();
             newUser.setPassword(passwordEncoder.encode(body.password()));
             newUser.setEmail(body.email());
             newUser.setName(body.name());
+            newUser.setRole(UserRole.USER);
+            newUser.setEnabled(true);
+            newUser.setAccountNonLocked(true);
             this.repository.save(newUser);
 
             String token = this.tokenService.generateToken(newUser);
             return ResponseEntity.ok(new ResponseDTO(newUser.getName(), token));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/register/admin")
+    public ResponseEntity<ResponseDTO> registerAdmin(@RequestBody @Valid RegisterRequestDTO body){
+        Optional<User> existingUser = this.repository.findByEmail(body.email());
+
+        if(existingUser.isEmpty()) {
+            User newAdmin = new User();
+            newAdmin.setPassword(passwordEncoder.encode(body.password()));
+            newAdmin.setEmail(body.email());
+            newAdmin.setName(body.name());
+            newAdmin.setRole(UserRole.ADMIN);
+            newAdmin.setEnabled(true);
+            newAdmin.setAccountNonLocked(true);
+            this.repository.save(newAdmin);
+
+            String token = this.tokenService.generateToken(newAdmin);
+            return ResponseEntity.ok(new ResponseDTO(newAdmin.getName(), token));
         }
         return ResponseEntity.badRequest().build();
     }
