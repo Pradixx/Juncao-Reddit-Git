@@ -1,4 +1,4 @@
-package com.digitodael.redgit.controller;
+package com.digitodael.redgit.controller.UserControllerTest;
 
 import com.digitodael.redgit.controllers.UserController;
 import com.digitodael.redgit.infrastructure.repository.UserRepository;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc(addFilters = false)
-class UserControllerTest {
+class UserControllerLogicTest {
 
     @Autowired
     private MockMvc mockMvc;
