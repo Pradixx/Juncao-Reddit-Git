@@ -35,13 +35,16 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-
+                        // Público
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register/admin").permitAll() // ⚠️ Apenas DEV
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
+                        // Admin
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
+                        // Resto precisa autenticação
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
