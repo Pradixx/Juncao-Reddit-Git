@@ -23,4 +23,21 @@ public class UserSecurity {
 
         return false;
     }
+
+    public boolean hasRole(String role) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated()) {
+            return false;
+        }
+
+        return auth.getAuthorities().stream()
+                .anyMatch(grantedAuthority ->
+                        grantedAuthority.getAuthority().equals("ROLE_" + role)
+                );
+    }
+
+    public boolean isAdminOrOwner(UUID userId) {
+        return hasRole("ADMIN") || isOwner(userId);
+    }
 }
