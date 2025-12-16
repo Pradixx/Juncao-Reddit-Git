@@ -11,6 +11,5 @@ public class IdeaDTO {
     @NotBlank(message = "Description is mandatory")
     private String description;
 
-    @NotBlank(message = "AuthorId is mandatory")
     private String authorId;
 }
