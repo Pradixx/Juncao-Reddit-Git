@@ -1,5 +1,11 @@
+/* ==========================================
+   FONTES
+   ========================================== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+/* ==========================================
+   VARIÁVEIS GLOBAIS
+   ========================================== */
 :root {
   --font-family-base: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   --font-size-base: 16px;
@@ -9,8 +15,11 @@
   --color-primary: #646cff;
   --color-primary-hover: #535bf2;
   --color-border: rgba(255, 255, 255, 0.2);
+  --color-muted: #ececf0;
+  --color-muted-foreground: #717182;
   --border-radius: 8px;
   --transition-speed: 0.25s;
+  --shadow-default: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .dark {
@@ -21,8 +30,19 @@
   --color-border: rgba(255, 255, 255, 0.2);
 }
 
-body {
+/* ==========================================
+   RESET + BOX SIZING
+   ========================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
+}
+
+/* ==========================================
+   BODY
+   ========================================== */
+body {
   min-height: 100vh;
   min-width: 320px;
   display: flex;
@@ -35,8 +55,12 @@ body {
   background-color: var(--color-background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
+/* ==========================================
+   TIPOGRAFIA
+   ========================================== */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family-base);
   font-weight: 600;
@@ -44,22 +68,30 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-text);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+h1 { font-size: 3.2em; line-height: 1.1; }
 
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.font-bold { font-weight: 700; }
+.font-medium { font-weight: 500; }
+
+.text-center { text-align: center; }
+
+/* ==========================================
+   LINKS
+   ========================================== */
 a {
   font-weight: 500;
   color: var(--color-primary);
   text-decoration: none;
   transition: color var(--transition-speed);
 }
+a:hover { color: var(--color-primary-hover); }
 
-a:hover {
-  color: var(--color-primary-hover);
-}
-
+/* ==========================================
+   BOTÕES
+   ========================================== */
 button {
   border-radius: var(--border-radius);
   border: 1px solid transparent;
@@ -72,16 +104,18 @@ button {
   cursor: pointer;
   transition: border-color var(--transition-speed), background-color var(--transition-speed);
 }
+button:hover { border-color: var(--color-primary); }
+button:focus, button:focus-visible { outline: 4px auto -webkit-focus-ring-color; }
 
-button:hover {
-  border-color: var(--color-primary);
-}
+/* Botões variantes */
+.btn { display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition-speed); }
+.btn-primary { background-color: var(--color-primary); color: #fff; }
+.btn-primary:hover { background-color: var(--color-primary-hover); }
+.btn-secondary { background-color: var(--color-muted); color: var(--color-muted-foreground); }
 
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
+/* ==========================================
+   INPUTS / TEXTAREAS / SELECTS
+   ========================================== */
 input, textarea, select {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
@@ -92,13 +126,52 @@ input, textarea, select {
   color: var(--color-text);
   transition: border-color var(--transition-speed), background-color var(--transition-speed);
 }
-
 input:focus, textarea:focus, select:focus {
   border-color: var(--color-primary);
   outline: none;
 }
 
+/* ==========================================
+   FLEX & LAYOUT HELPERS
+   ========================================== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.gap-2 { gap: 0.5rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
 
+/* ==========================================
+   CARDS
+   ========================================== */
+.card {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  box-shadow: var(--shadow-default);
+}
+
+/* ==========================================
+   BORDER & SPACING HELPERS
+   ========================================== */
+.border { border: 1px solid var(--color-border); }
+.rounded { border-radius: var(--border-radius); }
+.shadow { box-shadow: var(--shadow-default); }
+.p-2 { padding: 0.5rem; }
+.p-4 { padding: 1rem; }
+.p-6 { padding: 1.5rem; }
+.m-2 { margin: 0.5rem; }
+.m-4 { margin: 1rem; }
+
+/* ==========================================
+   DARK / LIGHT MODE
+   ========================================== */
 @media (prefers-color-scheme: light) {
   :root {
     --color-text: #213547;
@@ -108,43 +181,13 @@ input:focus, textarea:focus, select:focus {
     --color-border: rgba(0, 0, 0, 0.1);
   }
 
-  button {
-    background-color: #f9f9f9;
-    color: var(--color-text);
-  }
+  button { background-color: #f9f9f9; color: var(--color-text); }
+  input, textarea, select { background-color: #ffffff; color: var(--color-text); }
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.flex {
-  display: flex;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.gap-2 { gap: 0.5rem; }
-.gap-4 { gap: 1rem; }
-.gap-6 { gap: 1.5rem; }
-
-.text-center { text-align: center; }
-.rounded { border-radius: var(--border-radius); }
-.shadow { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-.bg-primary { background-color: var(--color-primary); color: #fff; }
-.bg-primary:hover { background-color: var(--color-primary-hover); }
-
-.border { border: 1px solid var(--color-border); }
-.p-2 { padding: 0.5rem; }
-.p-4 { padding: 1rem; }
-.p-6 { padding: 1.5rem; }
-.m-2 { margin: 0.5rem; }
-.m-4 { margin: 1rem; }
+/* ==========================================
+   SCROLLBAR (opcional)
+   ========================================== */
+body::-webkit-scrollbar { width: 8px; }
+body::-webkit-scrollbar-track { background: var(--color-background); }
+body::-webkit-scrollbar-thumb { background-color: var(--color-primary); border-radius: var(--border-radius); }
