@@ -11,6 +11,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const API_URL = 'http://localhost:8082/api';
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
@@ -19,16 +21,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
 
-
-    /*ajuste se necessário*/ const API_URL = 'http://localhost:8082/api'; //ajuste se necessário
-
-    
   const login = async (email: string, password: string) => {
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
       if (!res.ok) return false;
       const data = await res.json();
@@ -36,10 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('token', data.token);
       return true;
-    } catch (err) {
-      console.error(err);
-      return false;
-    }
+    } catch { return false; }
   };
 
   const register = async (username: string, email: string, password: string) => {
@@ -47,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password })
+        body: JSON.stringify({ username, email, password }),
       });
       if (!res.ok) return false;
       const data = await res.json();
@@ -55,10 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('token', data.token);
       return true;
-    } catch (err) {
-      console.error(err);
-      return false;
-    }
+    } catch { return false; }
   };
 
   const logout = () => {

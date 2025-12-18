@@ -21,11 +21,11 @@ interface IdeasContextType {
 
 const IdeasContext = createContext<IdeasContextType | undefined>(undefined);
 
+const API_URL = 'http://localhost:8082/api/ideas';
+
 export function IdeasProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [ideas, setIdeas] = useState<Idea[]>([]);
-  const API_URL = 'http://localhost:8082/api/ideas';
-
   const token = localStorage.getItem('token') || '';
 
   useEffect(() => {
