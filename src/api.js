@@ -1,15 +1,38 @@
 const API_URL = 'http://localhost:8082/api';
 
-export async function apiFetch(endpoint, method = 'GET', body = null, token = null) {
-  const headers = { 'Content-Type': 'application/json' };
-  if (token) headers['Authorization'] = `Bearer ${token}`;
-
-  const res = await fetch(`${API_URL}${endpoint}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : null,
+export async function apiGet(path, token) {
+  const res = await fetch(`${API_URL}${path}`, {
+    headers: { Authorization: `Bearer ${token}` }
   });
+  if (!res.ok) throw new Error('Erro na requisição GET');
+  return res.json();
+}
 
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
+export async function apiPost(path, body, token) {
+  const res = await fetch(`${API_URL}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error('Erro na requisição POST');
+  return res.json();
+}
+
+export async function apiPut(path, body, token) {
+  const res = await fetch(`${API_URL}${path}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error('Erro na requisição PUT');
+  return res.json();
+}
+
+export async function apiDelete(path, token) {
+  const res = await fetch(`${API_URL}${path}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error('Erro na requisição DELETE');
   return res.json();
 }
