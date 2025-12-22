@@ -21,8 +21,20 @@ export default function LoginPage() {
       <h1>Login</h1>
       {error && <p className="text-danger">{error}</p>}
       <form className="flex flex-col gap-2 w-full max-w-sm" onSubmit={handleSubmit}>
-        <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)} required />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+        />
         <button type="submit" className="btn btn-primary">Entrar</button>
       </form>
     </div>

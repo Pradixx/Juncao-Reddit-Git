@@ -5,15 +5,14 @@ export interface Idea {
   id: string;
   title: string;
   description: string;
-  author: string;
   authorId: string;
   createdAt: string;
 }
 
 interface IdeasContextType {
   ideas: Idea[];
-  createIdea: (title: string, description: string) => Promise<boolean>;
-  updateIdea: (id: string, title: string, description: string) => Promise<boolean>;
+  createIdea: (idea: { title: string; description: string }) => Promise<boolean>;
+  updateIdea: (id: string, idea: { title: string; description: string }) => Promise<boolean>;
   deleteIdea: (id: string) => Promise<boolean>;
   getIdea: (id: string) => Idea | undefined;
   getUserIdeas: () => Idea[];
@@ -41,13 +40,13 @@ export function IdeasProvider({ children }: { children: ReactNode }) {
     fetchIdeas();
   }, [token]);
 
-  const createIdea = async (title: string, description: string) => {
+  const createIdea = async (idea: { title: string; description: string }) => {
     if (!user) return false;
     try {
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ title, description })
+        body: JSON.stringify({ ...idea, authorId: user.id })
       });
       if (!res.ok) return false;
       const newIdea = await res.json();
@@ -56,12 +55,12 @@ export function IdeasProvider({ children }: { children: ReactNode }) {
     } catch { return false; }
   };
 
-  const updateIdea = async (id: string, title: string, description: string) => {
+  const updateIdea = async (id: string, idea: { title: string; description: string }) => {
     try {
       const res = await fetch(`${API_URL}/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ title, description })
+        body: JSON.stringify(idea)
       });
       if (!res.ok) return false;
       const updated = await res.json();

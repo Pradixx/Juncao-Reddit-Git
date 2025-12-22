@@ -11,7 +11,7 @@ export default function CreateIdeaPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = await createIdea(title, description);
+    const success = await createIdea({ title, description });
     if (success) navigate('/dashboard');
     else setError('Erro ao criar ideia');
   };
@@ -21,8 +21,18 @@ export default function CreateIdeaPage() {
       <h1>Criar Nova Ideia</h1>
       {error && <p className="text-danger">{error}</p>}
       <form className="flex flex-col gap-2 w-full max-w-md" onSubmit={handleSubmit}>
-        <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Título" required />
-        <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Descrição" required />
+        <input
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          placeholder="Título"
+          required
+        />
+        <textarea
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          placeholder="Descrição"
+          required
+        />
         <button type="submit" className="btn btn-primary">Criar Ideia</button>
       </form>
     </div>
