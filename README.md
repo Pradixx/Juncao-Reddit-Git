@@ -174,5 +174,4 @@ Este projeto está licenciado sob a licença MIT.
 
 ## Autor
 
-**Diego Silva Prado**
-**Daniel Macedo Silva**
+**Diego Silva Prado e Daniel Macedo Silva**
