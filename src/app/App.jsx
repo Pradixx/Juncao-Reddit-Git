@@ -3,16 +3,16 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { IdeasProvider } from '../contexts/IdeasContext';
 import ProtectedRoute from '../components/ProtectedRoute';
 
-import LandingPage from '../pages/LandingPage';
-import LoginPage from '../pages/LoginPage';
-import RegisterPage from '../pages/RegisterPage';
-import DashboardPage from '../pages/DashboardPage';
-import CreateIdeaPage from '../pages/CreateIdeaPage';
-import EditIdeaPage from '../pages/EditIdeaPage';
-import IdeasListPage from '../pages/IdeasListPage';
-import ViewIdeaPage from '../pages/ViewIdeaPage';
-import ProfilePage from '../pages/ProfilePage';
-import ErrorPage from '../pages/ErrorPage';
+import { LandingPage } from '../pages/LandingPage';
+import { LoginPage } from '../pages/LoginPage';
+import { RegisterPage } from '../pages/RegisterPage';
+import { DashboardPage } from '../pages/DashboardPage';
+import { CreateIdeaPage } from '../pages/CreateIdeaPage';
+import { EditIdeaPage } from '../pages/EditIdeaPage';
+import { IdeasListPage } from '../pages/IdeasListPage';
+import { ViewIdeaPage } from '../pages/ViewIdeaPage';
+import { ProfilePage } from '../pages/ProfilePage';
+import { ErrorPage } from '../pages/ErrorPage';
 
 export default function App() {
   return (
