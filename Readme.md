@@ -1,4 +1,4 @@
-# Junção Reddit/Git - Modulo de Registro de Ideas
+# Junção Reddit/Git - Módulo de Registro de Ideas
 
 Esta branch, `Reconfigurando-ideias`, representa uma reconfiguração arquitetural do projeto Junção Reddit/Git, focando na criação de um **Ideas Hub** (Hub de Ideias). A principal mudança é a migração do banco de dados relacional para o **MongoDB**, um banco de dados NoSQL, e a implementação de uma API RESTful para gerenciar ideias.
 
