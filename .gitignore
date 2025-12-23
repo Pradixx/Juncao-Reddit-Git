@@ -1,42 +1,42 @@
-HELP.md
+# --- Compilação e Build ---
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+build/
+out/
+bin/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# --- Maven Wrapper ---
+# É comum ignorar os scripts e a pasta .mvn se você espera que o usuário já tenha o Maven instalado
+mvnw
+mvnw.cmd
+.mvn/
 
-### IntelliJ IDEA ###
-.idea
+# --- IDEs (IntelliJ, VS Code, Eclipse) ---
+.idea/
 *.iws
 *.iml
 *.ipr
+.vscode/
+.classpath
+.project
+.settings/
+.factorypath
+.apt_generated
+.springBeans
+.sts4-cache
 
-### NetBeans ###
+# --- NetBeans ---
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
-
-### Security ###
+# --- Configurações Locais e Segredos (CRÍTICO) ---
 .env
-.env.local
-.env.*.local
-application-local.properties
-secrets/
-*.key
-*.pem
+src/main/resources/mongo.properties
+*.properties.local
+*.log
+
+# --- Sistema Operacional ---
+.DS_Store
+Thumbs.db
