@@ -1,33 +1,38 @@
-import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import { useAuth } from '../contexts/AuthContext';
-import { useIdeas } from '../contexts/IdeasContext';
-import { User } from 'lucide-react';
+import Header from "../components/Header";
+import { useAuth } from "../contexts/AuthContext";
+import { Mail, User } from "lucide-react";
 
 export default function ProfilePage() {
   const { user } = useAuth();
-  const { getUserIdeas } = useIdeas();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-gray-50">
       <Header />
-      <main className="flex-1 max-w-2xl mx-auto p-8 mt-10 bg-white rounded-2xl border shadow-sm">
-        <div className="flex items-center gap-6 mb-8">
-          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
-            <User size={40} className="text-blue-600"/>
+
+      <main className="mx-auto w-full max-w-3xl px-4 py-8">
+        <div className="rounded-2xl border bg-white p-6 shadow-sm">
+          <h1 className="text-2xl font-bold text-gray-900">Perfil</h1>
+          <p className="mt-1 text-sm text-gray-600">Informações da sua conta.</p>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border p-4">
+              <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+                <User className="h-4 w-4 text-indigo-600" />
+                Nome
+              </div>
+              <p className="mt-2 text-sm text-gray-600">{user?.name ?? "-"}</p>
+            </div>
+
+            <div className="rounded-xl border p-4">
+              <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+                <Mail className="h-4 w-4 text-indigo-600" />
+                Email
+              </div>
+              <p className="mt-2 text-sm text-gray-600">{user?.email ?? "-"}</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold">{user?.name}</h1>
-            <p className="text-gray-500">{user?.email}</p>
-          </div>
-        </div>
-        <div className="p-4 bg-gray-50 rounded-lg text-center">
-          <p className="text-sm text-gray-400">Total de Ideias Criadas</p>
-          <p className="text-3xl font-bold">{getUserIdeas().length}</p>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
