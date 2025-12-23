@@ -2,9 +2,9 @@
 
 Esta branch, `Reconfigurando-ideias`, representa uma reconfiguração arquitetural do projeto Junção Reddit/Git, focando na criação de um **Ideas Hub** (Hub de Ideias). A principal mudança é a migração do banco de dados relacional para o **MongoDB**, um banco de dados NoSQL, e a implementação de uma API RESTful para gerenciar ideias.
 
-## Tecnologias Utilizadas
+O objetivo principal é simular a estrutura de uma plataforma social, como o Reddit, com foco inicial na construção de módulos de backend robustos e escaláveis.
 
-O projeto é construído com as seguintes tecnologias principais:
+## 💡 Foco em Aprendizado e Aperfeiçoamento
 
 *   **Java 21**: Linguagem de programação.
 *   **Spring Boot 3.5.1**: Framework principal.
@@ -49,11 +49,11 @@ src/main/java/com/redgit/registry/ideashub/
 └── service/ (Lógica de Negócio: IdeaService, TokenService)
 ```
 
-## Configuração de Ambiente
+## Módulos Atuais
 
 O projeto utiliza variáveis de ambiente e arquivos de propriedades para a configuração do banco de dados e da chave secreta do JWT.
 
-### 1. Variáveis de Ambiente (`.env`)
+### 1. API - Cadastro e Login (Autenticação)
 
 Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo para a chave secreta do JWT:
 
