@@ -1,36 +1,51 @@
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { useAuth } from "../contexts/AuthContext";
-import { Mail, User } from "lucide-react";
+import { useIdeas } from "../contexts/IdeasContext";
 
 export default function ProfilePage() {
   const { user } = useAuth();
+  const { getUserIdeas } = useIdeas();
+  const navigate = useNavigate();
+
+  const myIdeas = getUserIdeas();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto w-full max-w-3xl px-4 py-8">
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h1 className="text-2xl font-bold text-gray-900">Perfil</h1>
-          <p className="mt-1 text-sm text-gray-600">Informações da sua conta.</p>
+      <main className="mx-auto max-w-6xl px-4 py-8">
+        <div className="mx-auto w-full max-w-2xl space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Perfil</CardTitle>
+              <CardDescription>Informações do usuário autenticado.</CardDescription>
+            </CardHeader>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border p-4">
-              <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                <User className="h-4 w-4 text-indigo-600" />
-                Nome
+            <CardContent className="space-y-3">
+              <div className="grid gap-1">
+                <div className="text-xs text-muted-foreground">Nome</div>
+                <div className="text-sm font-medium">{user?.name ?? "—"}</div>
               </div>
-              <p className="mt-2 text-sm text-gray-600">{user?.name ?? "-"}</p>
-            </div>
 
-            <div className="rounded-xl border p-4">
-              <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                <Mail className="h-4 w-4 text-indigo-600" />
-                Email
+              <div className="grid gap-1">
+                <div className="text-xs text-muted-foreground">Email</div>
+                <div className="text-sm font-medium">{user?.email ?? "—"}</div>
               </div>
-              <p className="mt-2 text-sm text-gray-600">{user?.email ?? "-"}</p>
-            </div>
-          </div>
+
+              <div className="grid gap-1">
+                <div className="text-xs text-muted-foreground">Total de ideias</div>
+                <div className="text-sm font-medium">{myIdeas.length}</div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <Button variant="outline" onClick={() => navigate("/ideas")}>Minhas ideias</Button>
+                <Button onClick={() => navigate("/dashboard")}>Dashboard</Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>

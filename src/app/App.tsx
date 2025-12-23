@@ -1,4 +1,3 @@
-// src/app/App.tsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "../contexts/AuthContext";
 import { IdeasProvider } from "../contexts/IdeasContext";
@@ -25,59 +24,12 @@ export default function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/ideas"
-              element={
-                <ProtectedRoute>
-                  <IdeasListPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/create-idea"
-              element={
-                <ProtectedRoute>
-                  <CreateIdeaPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/edit-idea/:id"
-              element={
-                <ProtectedRoute>
-                  <EditIdeaPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/view-idea/:id"
-              element={
-                <ProtectedRoute>
-                  <ViewIdeaPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+            <Route path="/ideas" element={<ProtectedRoute><IdeasListPage /></ProtectedRoute>} />
+            <Route path="/create-idea" element={<ProtectedRoute><CreateIdeaPage /></ProtectedRoute>} />
+            <Route path="/edit-idea/:id" element={<ProtectedRoute><EditIdeaPage /></ProtectedRoute>} />
+            <Route path="/view-idea/:id" element={<ProtectedRoute><ViewIdeaPage /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
             <Route path="/403" element={<ErrorPage type="403" />} />
             <Route path="*" element={<ErrorPage type="404" />} />

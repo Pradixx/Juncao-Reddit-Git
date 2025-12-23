@@ -1,8 +1,9 @@
 export default function Footer() {
   return (
-    <footer className="bg-white dark:bg-gray-900 shadow-inner mt-10">
-      <div className="max-w-7xl mx-auto p-4 text-center text-gray-500 dark:text-gray-400">
-        &copy; {new Date().getFullYear()} IdeaHub. All rights reserved.
+    <footer className="border-t">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-6 text-sm text-muted-foreground">
+        <p>© {new Date().getFullYear()} IdeasHub</p>
+        <p>RedGit • Ideas Service</p>
       </div>
     </footer>
   );

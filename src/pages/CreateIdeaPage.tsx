@@ -1,89 +1,176 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
 import { useIdeas } from "../contexts/IdeasContext";
-import { AlertCircle, Save } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+
+import Header from "../components/Header";
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "../components/ui/alert";
 
 export default function CreateIdeaPage() {
-  const { createIdea } = useIdeas();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { createIdea } = useIdeas();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string>("");
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const titleLen = title.trim().length;
+  const descLen = description.trim().length;
+
+  const canSubmit = useMemo(() => {
+    return !!user && titleLen >= 3 && descLen >= 10 && !submitting;
+  }, [user, titleLen, descLen, submitting]);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
+    setError("");
 
-    const ok = await createIdea({ title, description });
-    setLoading(false);
+    if (!user) {
+      setError("Você precisa estar logado para criar uma ideia.");
+      navigate("/login");
+      return;
+    }
 
-    if (ok) navigate("/ideas");
-    else setError("Erro ao criar ideia.");
-  };
+    if (titleLen < 3) {
+      setError("O título precisa ter pelo menos 3 caracteres.");
+      return;
+    }
+
+    if (descLen < 10) {
+      setError("A descrição precisa ter pelo menos 10 caracteres.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const ok = await createIdea({
+        title: title.trim(),
+        description: description.trim(),
+      });
+
+      if (!ok) {
+        setError(
+          "Não foi possível criar a ideia. Verifique o backend e tente novamente."
+        );
+        return;
+      }
+
+      navigate("/ideas");
+    } catch {
+      setError("Erro inesperado ao criar a ideia.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto w-full max-w-3xl px-4 py-8">
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h1 className="text-2xl font-bold text-gray-900">Criar nova ideia</h1>
-          <p className="mt-1 text-sm text-gray-600">Dê um título claro e descreva o suficiente para lembrar depois.</p>
+      <main className="container-app py-8">
+        <div className="mx-auto w-full max-w-2xl">
+          <div className="mb-6">
+            <h1 className="text-2xl font-semibold tracking-tight">
+              Criar nova ideia
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Escreva o título e descreva bem a ideia. Depois você pode editar.
+            </p>
+          </div>
 
           {error && (
-            <div className="mt-4 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-              <AlertCircle className="mt-0.5 h-4 w-4" />
-              <span>{error}</span>
+            <div className="mb-4">
+              <Alert>
+                <AlertTitle>Algo deu errado</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
             </div>
           )}
 
-          <form onSubmit={onSubmit} className="mt-6 space-y-4">
-            <div>
-              <label className="text-sm font-medium text-gray-700">Título</label>
-              <input
-                className="mt-1 w-full rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-200"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ex: Ideia para app de tarefas"
-                required
-              />
-            </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Detalhes da ideia</CardTitle>
+              <CardDescription>
+                Preencha as informações abaixo.
+              </CardDescription>
+            </CardHeader>
 
-            <div>
-              <label className="text-sm font-medium text-gray-700">Descrição</label>
-              <textarea
-                className="mt-1 min-h-[140px] w-full rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-200"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Descreva o problema, solução, público..."
-                required
-              />
-            </div>
+            <CardContent>
+              <form onSubmit={onSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Título</label>
+                  <Input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Ex: App para organizar tarefas com IA"
+                    autoFocus
+                    required
+                    minLength={3}
+                    maxLength={80}
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Mínimo 3 caracteres</span>
+                    <span>{titleLen}/80</span>
+                  </div>
+                </div>
 
-            <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
-              <button
-                type="button"
-                onClick={() => navigate(-1)}
-                className="rounded-md border bg-white px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50"
-              >
-                Cancelar
-              </button>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Descrição</label>
+                  <Textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Descreva o problema, a solução e como você imagina usar isso..."
+                    rows={6}
+                    required
+                    minLength={10}
+                    maxLength={800}
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Mínimo 10 caracteres</span>
+                    <span>{descLen}/800</span>
+                  </div>
+                </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
-              >
-                <Save className="h-4 w-4" />
-                {loading ? "Salvando..." : "Salvar"}
-              </button>
-            </div>
-          </form>
+                <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end sm:gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => navigate(-1)}
+                    disabled={submitting}
+                  >
+                    Cancelar
+                  </Button>
+
+                  <Button type="submit" disabled={!canSubmit}>
+                    {submitting ? "Criando..." : "Criar ideia"}
+                  </Button>
+                </div>
+
+                {!user && (
+                  <p className="pt-2 text-xs text-muted-foreground">
+                    Você não está logado. Faça login para criar ideias.
+                  </p>
+                )}
+              </form>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>

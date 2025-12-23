@@ -1,7 +1,9 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { FormEvent, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import Header from "../components/Header";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { useAuth } from "../contexts/AuthContext";
-import { AlertCircle, LogIn } from "lucide-react";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -9,10 +11,11 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -21,69 +24,68 @@ export default function LoginPage() {
     setLoading(false);
 
     if (ok) navigate("/dashboard");
-    else setError("Email ou senha inválidos.");
+    else setError("Credenciais inválidas ou usuário não encontrado.");
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4">
-        <div className="w-full max-w-md rounded-2xl border bg-white p-6 shadow-sm">
-          <h1 className="text-2xl font-bold text-gray-900">Entrar</h1>
-          <p className="mt-1 text-sm text-gray-600">Acesse sua conta para gerenciar suas ideias.</p>
+    <div className="min-h-screen bg-background">
+      <Header />
 
-          {error && (
-            <div className="mt-4 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-              <AlertCircle className="mt-0.5 h-4 w-4" />
-              <span>{error}</span>
-            </div>
-          )}
+      <main className="mx-auto flex max-w-6xl px-4 py-10">
+        <div className="mx-auto w-full max-w-md">
+          <Card>
+            <CardHeader>
+              <CardTitle>Entrar</CardTitle>
+              <CardDescription>Use seu email e senha para acessar.</CardDescription>
+            </CardHeader>
 
-          <form onSubmit={onSubmit} className="mt-6 space-y-4">
-            <div>
-              <label className="text-sm font-medium text-gray-700">Email</label>
-              <input
-                className="mt-1 w-full rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-200"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="voce@exemplo.com"
-                required
-              />
-            </div>
+            <CardContent className="space-y-4">
+              {error && (
+                <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
+                </div>
+              )}
 
-            <div>
-              <label className="text-sm font-medium text-gray-700">Senha</label>
-              <input
-                className="mt-1 w-full rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-200"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-              />
-              <p className="mt-2 text-xs text-gray-500">
-                Dica: sua API pode exigir senha com maiúscula/minúscula/número/especial.
+              <form className="space-y-3" onSubmit={handleSubmit}>
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">Email</label>
+                  <input
+                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="seuemail@dominio.com"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">Senha</label>
+                  <input
+                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+
+                <Button className="w-full" disabled={loading} type="submit">
+                  {loading ? "Entrando..." : "Entrar"}
+                </Button>
+              </form>
+
+              <p className="text-center text-sm text-muted-foreground">
+                Não tem conta?{" "}
+                <Link className="font-medium text-foreground underline" to="/register">
+                  Criar agora
+                </Link>
               </p>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
-            >
-              <LogIn className="h-4 w-4" />
-              {loading ? "Entrando..." : "Entrar"}
-            </button>
-
-            <p className="text-center text-sm text-gray-600">
-              Não tem conta?{" "}
-              <Link to="/register" className="font-semibold text-indigo-600 hover:underline">
-                Criar agora
-              </Link>
-            </p>
-          </form>
+            </CardContent>
+          </Card>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
