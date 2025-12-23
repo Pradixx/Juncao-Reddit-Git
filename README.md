@@ -1,75 +1,150 @@
-# Junção Reddit/Git - Projeto de Estudo e Desenvolvimento
+# Junção Reddit/Git - Modulo de Registro de Ideas
 
-Este repositório, **Junção Reddit/Git**, é um projeto pessoal e de aprendizado contínuo, focado na aplicação prática de arquiteturas de software modernas, como **Microsserviços** e **APIs RESTful**, utilizando o ecossistema **Spring Boot** e **Java**.
+Esta branch, `Reconfigurando-ideias`, representa uma reconfiguração arquitetural do projeto Junção Reddit/Git, focando na criação de um **Ideas Hub** (Hub de Ideias). A principal mudança é a migração do banco de dados relacional para o **MongoDB**, um banco de dados NoSQL, e a implementação de uma API RESTful para gerenciar ideias.
 
 O objetivo principal é simular a estrutura de uma plataforma social, como o Reddit, com foco inicial na construção de módulos de backend robustos e escaláveis.
 
 ## 💡 Foco em Aprendizado e Aperfeiçoamento
 
-Este projeto é um **laboratório de estudos** onde as técnicas e as melhores práticas de desenvolvimento são constantemente aperfeiçoadas. A estrutura atual reflete a evolução do aprendizado, com a migração de bancos de dados relacionais para NoSQL e a adoção de padrões de segurança como JWT.
+*   **Java 21**: Linguagem de programação.
+*   **Spring Boot 3.5.1**: Framework principal.
+*   **Spring Data MongoDB**: Para persistência de dados no MongoDB.
+*   **Spring Security**: Para autenticação e autorização via JWT.
+*   **JWT (Java-JWT)**: Para geração e validação de tokens de acesso.
+*   **MongoDB**: Banco de dados NoSQL para armazenamento de ideias.
+*   **Maven**: Gerenciamento de dependências.
+*   **Lombok**: Redução de código boilerplate.
+*   **SpringDoc/Swagger**: Para documentação da API.
+*   **Postman (Todos os testes de requisição)**: https://documenter.getpostman.com/view/48435237/2sBXVZmtvc
 
-**Enfatizamos que o projeto está em desenvolvimento ativo e as branches refletem diferentes fases de estudo e reconfiguração.**
+## Funcionalidades Implementadas
+
+A API Ideas Hub permite o gerenciamento completo de ideias, com autenticação obrigatória via JWT para todas as operações.
+
+| Método | Endpoint | Descrição | Acesso |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/ideas` | Cria uma nova ideia. O autor é definido pelo token JWT. | Autenticado |
+| `GET` | `/api/ideas` | Lista todas as ideias cadastradas. | Autenticado |
+| `GET` | `/api/ideas/{id}` | Busca uma ideia específica pelo seu ID. | Autenticado |
+| `GET` | `/api/ideas/my-ideas` | Lista as ideias criadas pelo usuário autenticado. | Autenticado |
+| `GET` | `/api/ideas/author/{authorId}` | Lista as ideias criadas por um autor específico (e-mail). | Autenticado |
+| `PUT` | `/api/ideas/{id}` | Substitui completamente uma ideia existente. Requer que o usuário seja o autor. | Autenticado |
+| `PATCH` | `/api/ideas/{id}` | Atualiza parcialmente uma ideia existente. Requer que o usuário seja o autor. | Autenticado |
+| `DELETE` | `/api/ideas/{id}` | Deleta uma ideia. Requer que o usuário seja o autor. | Autenticado |
+
+## Estrutura do Projeto
+
+O projeto segue a arquitetura de camadas, com foco na separação de responsabilidades e na integração com o MongoDB:
+
+```
+src/main/java/com/redgit/registry/ideashub/
+├── controller/
+│   ├── IdeaController.java (Endpoints da API)
+│   └── dto/ (Objetos de Transferência de Dados)
+├── infrastructure/
+│   ├── config/ (Configuração do MongoDB)
+│   ├── entities/ (Modelo de Dados: Idea.java)
+│   ├── repository/ (Interfaces de Repositório)
+│   └── security/ (Configurações de Spring Security, JWT Filter)
+└── service/ (Lógica de Negócio: IdeaService, TokenService)
+```
 
 ## Módulos Atuais
 
-A branch `main` integra os seguintes módulos de backend, cada um focado em uma responsabilidade específica:
+O projeto utiliza variáveis de ambiente e arquivos de propriedades para a configuração do banco de dados e da chave secreta do JWT.
 
 ### 1. API - Cadastro e Login (Autenticação)
 
-*   **Tecnologia Principal:** Spring Boot, Spring Security, JWT.
-*   **Banco de Dados:** MySQL (configurado via JPA).
-*   **Funcionalidade:** Gerenciamento de usuários, registro (USER e ADMIN) e autenticação via JSON Web Tokens (JWT).
-*   **Endpoints Principais:** `/api/auth/register`, `/api/auth/login`.
+Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo para a chave secreta do JWT:
 
-### 2. API - Ideias Hub
+```dotenv
+JWT_SECRET=3246918694727278232479912314703835454208642542872406260685881546
+```
 
-*   **Tecnologia Principal:** Spring Boot, Spring Security, JWT.
-*   **Banco de Dados:** MongoDB (NoSQL).
-*   **Funcionalidade:** CRUD (Create, Read, Update, Delete) para o recurso "Ideia", permitindo que usuários autenticados criem e gerenciem suas propostas.
-*   **Endpoints Principais:** `/api/ideas`.
+### 2. Arquivo de Propriedades (`application.properties`)
 
-## 🛠️ Tecnologias Comuns
+O arquivo `src/main/resources/application.properties` importa as configurações do MongoDB e define a porta do servidor e a chave secreta do JWT.
 
-Ambos os módulos compartilham um conjunto de tecnologias base:
+```properties
+spring.application.name=ideas-hub
 
-*   **Linguagem:** Java 21
-*   **Framework:** Spring Boot 3.x
-*   **Segurança:** Spring Security e JWT (com `com.auth0:java-jwt`)
-*   **Build Tool:** Maven
-*   **Documentação:** SpringDoc/Swagger
-*   **Postman (Todos os testes de requisição)**: https://documenter.getpostman.com/view/48435237/2sBXVZmtvc
+# MongoDB
+spring.config.import=mongo.properties
 
-## Próximos Passos (Roadmap)
+# Server
+server.port=8082
 
-O desenvolvimento futuro do projeto Junção Reddit/Git está focado em:
+# JWT
+security.jwt.secret-key=${JWT_SECRET:my-secret-key-from-digito}
+```
 
-1.  **Desenvolvimento do Front-end com React:** Iniciar a construção de uma interface de usuário dinâmica e responsiva para consumir as APIs de backend.
-2.  **Módulos Adicionais:** Implementar novos módulos de microsserviços para funcionalidades como:
-    *   **Comentários e Votação:** Estrutura para interações sociais.
-    *   **Notificações:** Sistema de alerta em tempo real.
-3.  **Escalabilidade e Dinamismo:** Continuar a aperfeiçoar a arquitetura para garantir alta disponibilidade e desempenho, explorando tecnologias como **Spring Cloud** e **Docker Compose** para orquestração.
+### 3. Configuração do MongoDB (`mongo.properties`)
+
+O arquivo `mongo.properties` (que deve ser criado em `src/main/resources/`) contém a string de conexão para o cluster MongoDB.
+
+```properties
+spring.data.mongodb.connection-string=mongodb+srv://digito:GXylmjKyw0fAVkm4@project-ideas-cluster.dcrxch1.mongodb.net/ideas-db?retryWrites=true&w=majority
+mongodb.databaseName=ideas-db
+```
+
+**Nota de Segurança**: A string de conexão fornecida é apenas para fins de aprendizado e desenvolvimento. Em produção, as credenciais devem ser gerenciadas de forma segura.
 
 ## Como Rodar o Projeto
 
-Devido à estrutura de multi-módulos, cada API deve ser configurada e executada separadamente.
+### Pré-requisitos
 
-### 1. API - Cadastro e Login
+*   **Java Development Kit (JDK) 21** ou superior.
+*   **Maven**.
+*   **Acesso ao Cluster MongoDB** (ou um servidor MongoDB local).
 
-*   **Porta:** `8081`
-*   **Banco de Dados:** MySQL
-*   **Configuração:** Necessita de um arquivo `.env` com as credenciais do MySQL e a chave `JWT_SECRET`.
+### Passos para Execução
 
-### 2. API - Ideias Hub
+1.  **Clone o repositório e mude para a branch:**
 
-*   **Porta:** `8082`
-*   **Banco de Dados:** MongoDB
-*   **Configuração:** Necessita de um arquivo `.env` com a chave `JWT_SECRET` e um arquivo `mongo.properties` com a string de conexão do MongoDB.
+    ```bash
+    git clone https://github.com/Pradixx/Juncao-Reddit-Git.git
+    cd Juncao-Reddit-Git
+    git checkout Reconfigurando-ideias
+    ```
 
-**Instruções de Execução:**
+2.  **Configure o ambiente:**
+    *   Crie e preencha o arquivo `.env` conforme a seção acima.
+    *   Crie e preencha o arquivo `src/main/resources/mongo.properties` conforme a seção acima.
 
-1.  Navegue até o diretório do módulo desejado (`API - Cadastro e Login` ou `API - Ideias Hub`).
-2.  Configure os arquivos de ambiente necessários.
-3.  Execute o comando: `./mvnw spring-boot:run`
+3.  **Compile e execute a aplicação:**
+
+    ```bash
+    ./mvnw clean install
+    ./mvnw spring-boot:run
+    ```
+
+A aplicação será iniciada na porta `8082`.
+
+## Exemplo de Uso (Criação de Ideia)
+
+Para criar uma ideia, você precisa de um token JWT válido (obtido através de um serviço de autenticação, como o implementado na branch `Login-Register-Alpha`).
+
+### 1. Criação de Ideia
+
+```bash
+# Substitua SEU_TOKEN_JWT pelo token real
+curl -X POST http://localhost:8082/api/ideas \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer SEU_TOKEN_JWT" \
+-d '{"title": "Nova Funcionalidade", "description": "Implementar um sistema de votação nas ideias."}'
+```
+
+**Resposta de Sucesso (201 Created):**
+
+```json
+{
+    "id": "65b21a8c8e8d9c001f0a0b1c",
+    "title": "Nova Funcionalidade",
+    "description": "Implementar um sistema de votação nas ideias.",
+    "authorId": "email_do_usuario_do_token",
+    "createdAt": "2024-01-25T10:00:00.000"
+}
+```
 
 ## Contribuições
 
