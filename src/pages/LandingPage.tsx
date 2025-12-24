@@ -7,11 +7,11 @@ export default function LandingPage() {
 
   return (
     <div className="page">
-      {/* Topbar (estilo Figma) */}
-      <header className="w-full border-b bg-white/70 backdrop-blur">
+      {/* Topbar */}
+      <header className="app-header">
         <div className="container-app h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 grid place-items-center rounded-xl bg-blue-600 text-white font-bold">
+            <div className="brand-badge h-9 w-9 grid place-items-center rounded-xl font-bold">
               💡
             </div>
             <div className="font-semibold">Gerenciador de Ideias</div>
@@ -22,13 +22,13 @@ export default function LandingPage() {
               <>
                 <button
                   onClick={() => navigate("/login")}
-                  className="text-sm text-slate-600 hover:text-slate-900"
+                  className="text-sm text-muted hover:text-strong"
                 >
                   Login
                 </button>
                 <button
                   onClick={() => navigate("/register")}
-                  className="h-10 px-4 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+                  className="btn-primary h-10 px-4 rounded-lg text-sm font-medium"
                 >
                   Registrar
                 </button>
@@ -36,7 +36,7 @@ export default function LandingPage() {
             ) : (
               <button
                 onClick={() => navigate("/dashboard")}
-                className="h-10 px-4 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700"
+                className="btn-primary h-10 px-4 rounded-lg text-sm font-medium"
               >
                 Dashboard
               </button>
@@ -48,11 +48,11 @@ export default function LandingPage() {
       <main className="container-app py-14">
         {/* Hero */}
         <div className="text-center max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
             Organize Suas Ideias de Forma <br className="hidden md:block" />
             Simples e Eficiente
           </h1>
-          <p className="mt-5 text-slate-600 text-base md:text-lg">
+          <p className="mt-5 text-muted text-base md:text-lg">
             Um sistema moderno baseado em microserviços para gerenciar todas as suas ideias em um só lugar.
             Crie, edite e organize suas inspirações de maneira profissional.
           </p>
@@ -60,21 +60,20 @@ export default function LandingPage() {
           <div className="mt-8 flex items-center justify-center gap-3">
             <button
               onClick={() => navigate(isAuthenticated ? "/dashboard" : "/register")}
-              className="h-11 px-6 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700"
+              className="btn-primary h-11 px-6 rounded-lg font-medium"
             >
               Começar Agora
             </button>
 
             <button
               onClick={() => navigate(isAuthenticated ? "/ideas" : "/login")}
-              className="h-11 px-6 rounded-lg bg-white border border-slate-200 text-slate-900 font-medium hover:bg-slate-50"
+              className="btn-outline h-11 px-6 rounded-lg font-medium"
             >
               Já tenho conta
             </button>
           </div>
         </div>
 
-        {/* Cards 4 colunas */}
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { title: "Gestão de Ideias", desc: "Crie, edite e organize suas ideias com título, descrição e metadados.", icon: "💡" },
@@ -82,18 +81,19 @@ export default function LandingPage() {
             { title: "Controle de Autoria", desc: "Apenas o autor pode editar ou excluir suas próprias ideias.", icon: "👥" },
             { title: "Microserviços", desc: "Arquitetura moderna com Spring Boot e serviços separados.", icon: "⚡" },
           ].map((c) => (
-            <div key={c.title} className="card-soft p-6">
-              <div className="h-11 w-11 rounded-2xl bg-blue-50 grid place-items-center text-lg">{c.icon}</div>
-              <h3 className="mt-4 font-semibold text-slate-900">{c.title}</h3>
-              <p className="mt-2 text-sm text-slate-600">{c.desc}</p>
+            <div key={c.title} className="feature-card p-6">
+              <div className="h-11 w-11 rounded-2xl bg-white/10 grid place-items-center text-lg">
+                {c.icon}
+              </div>
+              <h3 className="mt-4 font-semibold">{c.title}</h3>
+              <p className="mt-2 text-sm text-muted">{c.desc}</p>
             </div>
           ))}
         </div>
 
-        {/* Tecnologias */}
-        <div className="mt-14 card-soft p-8">
-          <h2 className="text-center font-semibold text-slate-900">Tecnologias Utilizadas</h2>
-          <p className="mt-2 text-center text-sm text-slate-600">
+        <div className="mt-14 feature-card p-8">
+          <h2 className="text-center font-semibold">Tecnologias Utilizadas</h2>
+          <p className="mt-2 text-center text-sm text-muted">
             Frontend (React + Vite + Tailwind) • Auth (Spring Security + JWT) • IdeasHub (Spring Boot + MongoDB)
           </p>
         </div>

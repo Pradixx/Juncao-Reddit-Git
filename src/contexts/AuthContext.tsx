@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
+// src/contexts/AuthContext.tsx
+import { createContext, useContext, useEffect, useMemo, useState, ReactNode, useCallback } from "react";
 
 export interface User {
   id: string;
@@ -9,16 +10,18 @@ export interface User {
 interface AuthContextType {
   user: User | null;
   token: string | null;
+  isAuthenticated: boolean;
+
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  isAuthenticated: boolean;
+
   refreshMe: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_URL = "http://localhost:8081/api";
+const API_AUTH = "http://localhost:8081/api";
 
 function safeJsonParse<T>(value: string | null): T | null {
   if (!value) return null;
@@ -33,16 +36,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => safeJsonParse<User>(localStorage.getItem("user")));
   const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setUser(null);
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-  };
+  }, []);
 
-  const fetchMe = async (jwt: string): Promise<User | null> => {
+  const fetchMe = useCallback(async (jwt: string): Promise<User | null> => {
     try {
-      const res = await fetch(`${API_URL}/user/me`, {
+      const res = await fetch(`${API_AUTH}/user/me`, {
         headers: { Authorization: `Bearer ${jwt}` },
       });
       if (!res.ok) return null;
@@ -51,9 +54,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       return null;
     }
-  };
+  }, []);
 
-  const refreshMe = async () => {
+  const refreshMe = useCallback(async (): Promise<boolean> => {
     const jwt = localStorage.getItem("token");
     if (!jwt) return false;
 
@@ -67,22 +70,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(jwt);
     localStorage.setItem("user", JSON.stringify(me));
     return true;
-  };
+  }, [fetchMe, logout]);
 
-useEffect(() => {
-  const storedToken = localStorage.getItem("token");
-  if (storedToken && !user) {
-    refreshMe();
-  }
-}, [user]);
+  // ✅ Bootstrap: se tem token, garante que user está certo (1 vez)
+  useEffect(() => {
+    const jwt = localStorage.getItem("token");
+    if (!jwt) return;
 
-  const login = async (email: string, password: string) => {
+    // se user está vazio ou token mudou, refaz /me
+    if (!user || token !== jwt) {
+      refreshMe();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     try {
-      const res = await fetch(`${API_URL}/auth/login`, {
+      const res = await fetch(`${API_AUTH}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       if (!res.ok) return false;
 
       const data = await res.json();
@@ -103,15 +112,16 @@ useEffect(() => {
     } catch {
       return false;
     }
-  };
+  }, [fetchMe, logout]);
 
-  const register = async (name: string, email: string, password: string) => {
+  const register = useCallback(async (name: string, email: string, password: string): Promise<boolean> => {
     try {
-      const res = await fetch(`${API_URL}/auth/register`, {
+      const res = await fetch(`${API_AUTH}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
       });
+
       if (!res.ok) return false;
 
       const data = await res.json();
@@ -132,7 +142,7 @@ useEffect(() => {
     } catch {
       return false;
     }
-  };
+  }, [fetchMe, logout]);
 
   const value = useMemo<AuthContextType>(
     () => ({
@@ -141,10 +151,10 @@ useEffect(() => {
       login,
       register,
       logout,
-      isAuthenticated: !!user && !!token,
       refreshMe,
+      isAuthenticated: !!user && !!token,
     }),
-    [user, token]
+    [user, token, login, register, logout, refreshMe]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

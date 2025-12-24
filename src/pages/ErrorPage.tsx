@@ -12,10 +12,10 @@ export default function ErrorPage({ type = "404" }: Props) {
   const is403 = type === "403";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen app-page">
       <Header />
 
-      <div className="w-full bg-gradient-to-b from-muted/40 via-background to-background">
+      <div className="w-full app-page-bg">
         <main className="container-app py-10">
           <div className="mx-auto w-full max-w-xl">
             <Card>
@@ -29,23 +29,18 @@ export default function ErrorPage({ type = "404" }: Props) {
                     : "A rota não existe ou foi movida."}
                 </CardDescription>
               </CardHeader>
+
               <CardContent className="flex flex-col gap-3">
-                <div className="rounded-lg border bg-muted/40 p-4">
-                  <div className="text-5xl font-semibold tracking-tight">
-                    {type}
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Volte para uma rota segura.
-                  </p>
+                <div className="error-box rounded-lg p-4">
+                  <div className="text-5xl font-semibold tracking-tight">{type}</div>
+                  <p className="mt-2 text-sm text-muted">Volte para uma rota segura.</p>
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
                   <Button variant="outline" onClick={() => navigate(-1)}>
                     Voltar
                   </Button>
-                  <Button onClick={() => navigate("/dashboard")}>
-                    Ir para Dashboard
-                  </Button>
+                  <Button onClick={() => navigate("/dashboard")}>Ir para Dashboard</Button>
                 </div>
               </CardContent>
             </Card>

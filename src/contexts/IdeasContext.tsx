@@ -1,3 +1,4 @@
+// src/contexts/IdeasContext.tsx
 import {
   createContext,
   useContext,
@@ -13,7 +14,7 @@ export interface Idea {
   id: string;
   title: string;
   description: string;
-  authorId: string;
+  authorId: string; // no seu back isso é o EMAIL do autor
   createdAt: string;
 }
 
@@ -30,14 +31,17 @@ interface IdeasContextType {
   deleteIdea: (id: string) => Promise<boolean>;
 
   getIdea: (id: string) => Idea | undefined;
+
+  // ✅ helper pro front decidir UI
+  isOwner: (idea?: Pick<Idea, "authorId"> | null) => boolean;
 }
 
 const IdeasContext = createContext<IdeasContextType | undefined>(undefined);
 
-const API_URL = "http://localhost:8082/api/ideas";
+const API_IDEAS = "http://localhost:8082/api/ideas";
 
 export function IdeasProvider({ children }: { children: ReactNode }) {
-  const { isAuthenticated, token } = useAuth();
+  const { isAuthenticated, token, user } = useAuth();
 
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [myIdeas, setMyIdeas] = useState<Idea[]>([]);
@@ -47,6 +51,15 @@ export function IdeasProvider({ children }: { children: ReactNode }) {
     return token ? { Authorization: `Bearer ${token}` } : {};
   }, [token]);
 
+  const isOwner = useCallback(
+    (idea?: Pick<Idea, "authorId"> | null) => {
+      if (!idea?.authorId) return false;
+      if (!user?.email) return false;
+      return idea.authorId === user.email;
+    },
+    [user?.email]
+  );
+
   const refreshAll = useCallback(async () => {
     if (!isAuthenticated) {
       setIdeas([]);
@@ -54,10 +67,11 @@ export function IdeasProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const res = await fetch(API_URL, { headers: authHeaders() });
+      const res = await fetch(API_IDEAS, { headers: authHeaders() });
 
       if (!res.ok) {
-        setIdeas([]);
+        // se perdeu auth, não deixa “fantasma”
+        if (res.status === 401 || res.status === 403) setIdeas([]);
         return;
       }
 
@@ -76,10 +90,10 @@ export function IdeasProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const res = await fetch(`${API_URL}/my-ideas`, { headers: authHeaders() });
+      const res = await fetch(`${API_IDEAS}/my-ideas`, { headers: authHeaders() });
 
       if (!res.ok) {
-        setMyIdeas([]);
+        if (res.status === 401 || res.status === 403) setMyIdeas([]);
         return;
       }
 
@@ -110,55 +124,65 @@ export function IdeasProvider({ children }: { children: ReactNode }) {
     refreshBoot();
   }, [refreshBoot]);
 
-  const createIdea = async (idea: { title: string; description: string }) => {
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...authHeaders() },
-        body: JSON.stringify(idea),
-      });
+  const createIdea = useCallback(
+    async (idea: { title: string; description: string }) => {
+      try {
+        const res = await fetch(API_IDEAS, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...authHeaders() },
+          body: JSON.stringify(idea),
+        });
 
-      if (!res.ok) return false;
+        if (!res.ok) return false;
 
-      await refreshBoot();
-      return true;
-    } catch {
-      return false;
-    }
-  };
+        await refreshBoot();
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [authHeaders, refreshBoot]
+  );
 
-  const updateIdea = async (id: string, idea: { title: string; description: string }) => {
-    try {
-      const res = await fetch(`${API_URL}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", ...authHeaders() },
-        body: JSON.stringify(idea),
-      });
+  const updateIdea = useCallback(
+    async (id: string, idea: { title: string; description: string }) => {
+      try {
+        const res = await fetch(`${API_IDEAS}/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json", ...authHeaders() },
+          body: JSON.stringify(idea),
+        });
 
-      if (!res.ok) return false;
+        // ✅ se 403, é “não é sua”
+        if (!res.ok) return false;
 
-      await refreshBoot();
-      return true;
-    } catch {
-      return false;
-    }
-  };
+        await refreshBoot();
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [authHeaders, refreshBoot]
+  );
 
-  const deleteIdea = async (id: string) => {
-    try {
-      const res = await fetch(`${API_URL}/${id}`, {
-        method: "DELETE",
-        headers: authHeaders(),
-      });
+  const deleteIdea = useCallback(
+    async (id: string) => {
+      try {
+        const res = await fetch(`${API_IDEAS}/${id}`, {
+          method: "DELETE",
+          headers: authHeaders(),
+        });
 
-      if (!res.ok) return false;
+        if (!res.ok) return false;
 
-      await refreshBoot();
-      return true;
-    } catch {
-      return false;
-    }
-  };
+        await refreshBoot();
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [authHeaders, refreshBoot]
+  );
 
   const value = useMemo<IdeasContextType>(
     () => ({
@@ -171,8 +195,9 @@ export function IdeasProvider({ children }: { children: ReactNode }) {
       updateIdea,
       deleteIdea,
       getIdea: (id) => myIdeas.find((i) => i.id === id) ?? ideas.find((i) => i.id === id),
+      isOwner,
     }),
-    [ideas, myIdeas, loading, refreshAll, refreshMine]
+    [ideas, myIdeas, loading, refreshAll, refreshMine, createIdea, updateIdea, deleteIdea, isOwner]
   );
 
   return <IdeasContext.Provider value={value}>{children}</IdeasContext.Provider>;

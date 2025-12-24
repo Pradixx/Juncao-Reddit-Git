@@ -28,16 +28,16 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen app-page">
       <Header />
 
-      <div className="w-full bg-gradient-to-b from-muted/40 via-background to-background">
+      <div className="w-full app-page-bg">
         <main className="container-app py-8">
           <div className="mx-auto w-full max-w-3xl space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Perfil</h1>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-muted mt-1">
                   Dados vêm de <code>/api/user/me</code>.
                 </p>
               </div>
@@ -66,13 +66,13 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex flex-col gap-1">
-                    <span className="text-xs text-muted-foreground">Nome</span>
+                    <span className="text-xs text-muted">Nome</span>
                     <div className="text-base font-medium">{user?.name ?? "—"}</div>
                   </div>
 
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex flex-col gap-1">
-                      <span className="text-xs text-muted-foreground">Email</span>
+                      <span className="text-xs text-muted">Email</span>
                       <div className="text-sm font-medium">{user?.email ?? "—"}</div>
                     </div>
                     <div className="flex gap-2">
@@ -96,7 +96,7 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <div className="text-3xl font-semibold">{total}</div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted">
                     Total das suas ideias (endpoint <code>/my-ideas</code>)
                   </p>
                   <Button className="w-full" onClick={() => navigate("/ideas")}>

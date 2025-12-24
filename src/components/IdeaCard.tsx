@@ -1,3 +1,4 @@
+// src/components/IdeaCard.tsx
 import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
@@ -10,9 +11,14 @@ type IdeaCardProps = {
   description: string;
   createdAt?: string;
   className?: string;
-  onEdit?: () => void;
-  onDelete?: () => void;
+  onEdit?: () => void | Promise<void>;
+  onDelete?: () => void | Promise<void>;
+
+  // ✅ mantém seu padrão atual
   showActions?: boolean;
+
+  // ✅ novo: controle real de permissão (front)
+  isOwner?: boolean;
 };
 
 export default function IdeaCard({
@@ -24,6 +30,7 @@ export default function IdeaCard({
   onEdit,
   onDelete,
   showActions = true,
+  isOwner = false,
 }: IdeaCardProps) {
   const navigate = useNavigate();
 
@@ -38,23 +45,24 @@ export default function IdeaCard({
         </div>
 
         {createdAt ? (
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted">
             Criado em: {new Date(createdAt).toLocaleString()}
           </p>
         ) : (
-          <p className="text-xs text-muted-foreground">—</p>
+          <p className="text-xs text-muted">—</p>
         )}
       </CardHeader>
 
       <CardContent className="space-y-4">
-        <p className="text-sm text-muted-foreground line-clamp-3">{description}</p>
+        <p className="text-sm text-muted line-clamp-3">{description}</p>
 
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={() => navigate(`/view-idea/${id}`)}>
             Ver
           </Button>
 
-          {showActions && (
+          {/* ✅ ações só aparecem se for dono */}
+          {showActions && isOwner && (
             <>
               <Button
                 variant="secondary"
@@ -69,6 +77,11 @@ export default function IdeaCard({
             </>
           )}
         </div>
+
+        {/* opcional: dica visual */}
+        {showActions && !isOwner && (
+          <p className="text-xs text-muted">Somente leitura (não é sua ideia).</p>
+        )}
       </CardContent>
     </Card>
   );

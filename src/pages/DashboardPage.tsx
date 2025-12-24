@@ -10,7 +10,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../co
 import { Badge } from "../components/ui/badge";
 import { Skeleton } from "../components/ui/skeleton";
 
-
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -22,11 +21,10 @@ export default function DashboardPage() {
   }, [myIdeas]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen app-page">
       <Header />
 
-      {/* “Figma feel”: fundo leve com gradiente */}
-      <div className="w-full bg-gradient-to-b from-muted/40 via-background to-background">
+      <div className="w-full app-page-bg">
         <main className="container-app py-8">
           <div className="flex flex-col gap-6">
             {/* Top */}
@@ -41,16 +39,17 @@ export default function DashboardPage() {
                   </Badge>
                 </div>
 
-                <p className="text-sm text-muted-foreground">
-                  Olá, <span className="font-medium text-foreground">{user?.name ?? "Usuário"}</span>.
-                  Aqui estão suas ideias e atalhos rápidos.
+                <p className="text-sm text-muted">
+                  Olá,{" "}
+                  <span className="font-medium text-strong">
+                    {user?.name ?? "Usuário"}
+                  </span>
+                  . Aqui estão suas ideias e atalhos rápidos.
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Button onClick={() => navigate("/create-idea")}>
-                  Nova ideia
-                </Button>
+                <Button onClick={() => navigate("/create-idea")}>Nova ideia</Button>
                 <Button variant="outline" onClick={() => navigate("/ideas")}>
                   Ver todas
                 </Button>
@@ -64,7 +63,7 @@ export default function DashboardPage() {
             <div className="grid gap-4 md:grid-cols-3">
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                  <CardTitle className="text-sm font-medium text-muted">
                     Total de ideias (suas)
                   </CardTitle>
                 </CardHeader>
@@ -74,7 +73,7 @@ export default function DashboardPage() {
                   ) : (
                     <div className="text-3xl font-semibold">{stats.total}</div>
                   )}
-                  <p className="mt-2 text-xs text-muted-foreground">
+                  <p className="mt-2 text-xs text-muted">
                     Baseado em <code>/api/ideas/my-ideas</code>
                   </p>
                 </CardContent>
@@ -90,9 +89,13 @@ export default function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-sm text-muted">
                     Quer manter tudo organizado? Use descrições com:
-                    <span className="text-foreground font-medium"> problema → solução → MVP</span>.
+                    <span className="text-strong font-medium">
+                      {" "}
+                      problema → solução → MVP
+                    </span>
+                    .
                   </div>
                   <Button variant="outline" onClick={() => navigate("/create-idea")}>
                     Criar agora
@@ -118,7 +121,7 @@ export default function DashboardPage() {
               ) : myIdeas.length === 0 ? (
                 <Card>
                   <CardContent className="py-10 text-center">
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted">
                       Você ainda não tem ideias. Crie a primeira agora.
                     </p>
                     <div className="mt-4 flex justify-center">
@@ -138,6 +141,7 @@ export default function DashboardPage() {
                       onEdit={() => navigate(`/edit-idea/${idea.id}`)}
                       onDelete={() => navigate(`/ideas?delete=${idea.id}`)}
                       showActions
+                      isOwner 
                     />
                   ))}
                 </div>

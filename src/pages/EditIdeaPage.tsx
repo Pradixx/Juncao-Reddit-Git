@@ -31,7 +31,10 @@ export default function EditIdeaPage() {
     setDescription(idea.description ?? "");
   }, [idea]);
 
-  const canSubmit = useMemo(() => titleLen >= 3 && descLen >= 10 && !submitting, [titleLen, descLen, submitting]);
+  const canSubmit = useMemo(
+    () => titleLen >= 3 && descLen >= 10 && !submitting,
+    [titleLen, descLen, submitting]
+  );
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -74,7 +77,7 @@ export default function EditIdeaPage() {
 
   if (!id) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen app-page">
         <Header />
         <main className="container-app py-10">
           <Alert>
@@ -88,14 +91,12 @@ export default function EditIdeaPage() {
 
   if (!idea) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen app-page">
         <Header />
         <main className="container-app py-10">
           <Alert>
             <AlertTitle>Ideia não encontrada</AlertTitle>
-            <AlertDescription>
-              Essa ideia não está carregada. Volte para a lista e atualize.
-            </AlertDescription>
+            <AlertDescription>Essa ideia não está carregada. Volte para a lista e atualize.</AlertDescription>
           </Alert>
           <div className="mt-4">
             <Button onClick={() => navigate("/ideas")}>Voltar para Ideias</Button>
@@ -106,16 +107,16 @@ export default function EditIdeaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen app-page">
       <Header />
 
-      <div className="w-full bg-gradient-to-b from-muted/40 via-background to-background">
+      <div className="w-full app-page-bg">
         <main className="container-app py-8">
           <div className="mx-auto w-full max-w-2xl space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h1 className="text-2xl font-semibold tracking-tight">Editar ideia</h1>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-muted mt-1">
                   Atualize o conteúdo. O backend valida se você é o autor.
                 </p>
               </div>
@@ -148,7 +149,7 @@ export default function EditIdeaPage() {
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Título</label>
                     <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-                    <div className="flex justify-between text-xs text-muted-foreground">
+                    <div className="flex justify-between text-xs text-muted">
                       <span>Mínimo 3 caracteres</span>
                       <span>{titleLen}/80</span>
                     </div>
@@ -156,15 +157,24 @@ export default function EditIdeaPage() {
 
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Descrição</label>
-                    <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={7} />
-                    <div className="flex justify-between text-xs text-muted-foreground">
+                    <Textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      rows={7}
+                    />
+                    <div className="flex justify-between text-xs text-muted">
                       <span>Mínimo 10 caracteres</span>
                       <span>{descLen}/800</span>
                     </div>
                   </div>
 
                   <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3 pt-2">
-                    <Button type="button" variant="outline" onClick={() => navigate("/ideas")} disabled={submitting}>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => navigate("/ideas")}
+                      disabled={submitting}
+                    >
                       Cancelar
                     </Button>
                     <Button type="submit" disabled={!canSubmit}>

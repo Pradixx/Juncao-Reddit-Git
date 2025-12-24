@@ -12,22 +12,20 @@ export default function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
 
   const navClass = ({ isActive }: { isActive: boolean }) =>
-    cn(
-      "text-sm font-medium transition-colors",
-      isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-    );
+    cn("app-navlink text-sm font-medium transition-colors", isActive && "is-active");
 
   return (
-    <header className={cn("sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur", className)}>
+    <header className={cn("app-header sticky top-0 z-50 w-full", className)}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Brand */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground font-bold">
+          <div className="brand-badge grid h-9 w-9 place-items-center rounded-xl font-bold">
             I
           </div>
+
           <div className="leading-tight">
             <div className="text-sm font-semibold">IdeasHub</div>
-            <div className="text-xs text-muted-foreground">Organize ideias com estilo</div>
+            <div className="text-xs text-muted">Organize ideias com estilo</div>
           </div>
         </Link>
 
@@ -66,7 +64,7 @@ export default function Header({ className }: HeaderProps) {
             <>
               <div className="hidden md:block text-right mr-2">
                 <div className="text-sm font-medium leading-4">{user?.name ?? "Usuário"}</div>
-                <div className="text-xs text-muted-foreground">{user?.email ?? ""}</div>
+                <div className="text-xs text-muted">{user?.email ?? ""}</div>
               </div>
 
               <Button

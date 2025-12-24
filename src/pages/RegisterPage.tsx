@@ -47,25 +47,28 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="page flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen app-page hero-bg flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md text-center">
-        <div className="mx-auto h-10 w-10 grid place-items-center rounded-2xl bg-blue-600 text-white font-bold">💡</div>
-        <h1 className="mt-4 text-3xl font-bold text-slate-900">Criar conta</h1>
-        <p className="mt-2 text-slate-600">Comece a organizar suas ideias agora</p>
+        <div className="brand-badge mx-auto h-10 w-10 grid place-items-center rounded-2xl font-bold">
+          💡
+        </div>
 
-        <div className="mt-8 card-soft p-6 text-left">
+        <h1 className="mt-4 text-3xl font-bold text-strong">Criar conta</h1>
+        <p className="mt-2 text-muted">Comece a organizar suas ideias agora</p>
+
+        <div className="mt-8 feature-card p-6 text-left">
           {error && (
-            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="alert-danger mb-4 rounded-lg px-4 py-3 text-sm">
               {error}
             </div>
           )}
 
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-slate-900">Nome de usuário</label>
+              <label className="text-sm font-medium text-strong">Nome de usuário</label>
               <div className="mt-2">
                 <input
-                  className="h-11 w-full rounded-lg border border-slate-200 bg-white px-3 outline-none focus:ring-4 focus:ring-blue-100"
+                  className="ui-input ui-border ui-surface h-11 w-full rounded-lg px-3 text-sm ui-focus-ring"
                   placeholder="seu_nome"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -75,10 +78,10 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-slate-900">Email</label>
+              <label className="text-sm font-medium text-strong">Email</label>
               <div className="mt-2">
                 <input
-                  className="h-11 w-full rounded-lg border border-slate-200 bg-white px-3 outline-none focus:ring-4 focus:ring-blue-100"
+                  className="ui-input ui-border ui-surface h-11 w-full rounded-lg px-3 text-sm ui-focus-ring"
                   placeholder="seu@email.com"
                   type="email"
                   value={email}
@@ -89,10 +92,10 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-slate-900">Senha</label>
+              <label className="text-sm font-medium text-strong">Senha</label>
               <div className="mt-2">
                 <input
-                  className="h-11 w-full rounded-lg border border-slate-200 bg-white px-3 outline-none focus:ring-4 focus:ring-blue-100"
+                  className="ui-input ui-border ui-surface h-11 w-full rounded-lg px-3 text-sm ui-focus-ring"
                   placeholder="********"
                   type="password"
                   value={password}
@@ -100,16 +103,16 @@ export default function RegisterPage() {
                   autoComplete="new-password"
                 />
               </div>
-              <p className="mt-2 text-xs text-slate-500">
+              <p className="mt-2 text-xs text-muted">
                 Necessário ter caractere maiúscula, minúscula, número e caractere especial.
               </p>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-slate-900">Confirmar senha</label>
+              <label className="text-sm font-medium text-strong">Confirmar senha</label>
               <div className="mt-2">
                 <input
-                  className="h-11 w-full rounded-lg border border-slate-200 bg-white px-3 outline-none focus:ring-4 focus:ring-blue-100"
+                  className="ui-input ui-border ui-surface h-11 w-full rounded-lg px-3 text-sm ui-focus-ring"
                   placeholder="********"
                   type="password"
                   value={confirm}
@@ -122,14 +125,14 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={!canSubmit}
-              className="h-11 w-full rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-60 disabled:hover:bg-blue-600"
+              className="btn-primary h-11 w-full rounded-lg font-medium disabled:opacity-60"
             >
               {submitting ? "Criando..." : "Criar conta"}
             </button>
 
-            <p className="text-center text-sm text-slate-600">
+            <p className="text-center text-sm text-muted">
               Já tem uma conta?{" "}
-              <Link to="/login" className="text-blue-700 hover:underline font-medium">
+              <Link to="/login" className="link-primary font-medium">
                 Faça login aqui
               </Link>
             </p>
@@ -138,7 +141,7 @@ export default function RegisterPage() {
 
         <button
           onClick={() => navigate("/")}
-          className="mt-6 text-sm text-slate-600 hover:text-slate-900"
+          className="mt-6 text-sm text-muted hover:text-strong"
         >
           ← Voltar para página inicial
         </button>
