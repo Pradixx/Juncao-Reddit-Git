@@ -15,24 +15,43 @@ export default function ErrorPage({ type = "404" }: Props) {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto max-w-6xl px-4 py-10">
-        <div className="mx-auto max-w-xl">
-          <Card>
-            <CardHeader>
-              <CardTitle>{is403 ? "Acesso negado" : "Página não encontrada"}</CardTitle>
-              <CardDescription>
-                {is403 ? "Você não tem permissão para acessar essa rota." : "Essa rota não existe."}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => navigate("/")}>
-                Início
-              </Button>
-              <Button onClick={() => navigate("/dashboard")}>Dashboard</Button>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
+      <div className="w-full bg-gradient-to-b from-muted/40 via-background to-background">
+        <main className="container-app py-10">
+          <div className="mx-auto w-full max-w-xl">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl">
+                  {is403 ? "Acesso negado" : "Página não encontrada"}
+                </CardTitle>
+                <CardDescription>
+                  {is403
+                    ? "Você não tem permissão para acessar esse conteúdo."
+                    : "A rota não existe ou foi movida."}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-3">
+                <div className="rounded-lg border bg-muted/40 p-4">
+                  <div className="text-5xl font-semibold tracking-tight">
+                    {type}
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Volte para uma rota segura.
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+                  <Button variant="outline" onClick={() => navigate(-1)}>
+                    Voltar
+                  </Button>
+                  <Button onClick={() => navigate("/dashboard")}>
+                    Ir para Dashboard
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

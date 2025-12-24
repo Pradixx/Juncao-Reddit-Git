@@ -8,11 +8,11 @@ export interface User {
 
 interface AuthContextType {
   user: User | null;
+  token: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
-  token: string | null;
   refreshMe: () => Promise<boolean>;
 }
 
@@ -33,13 +33,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => safeJsonParse<User>(localStorage.getItem("user")));
   const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
 
-  useEffect(() => {
-    const storedUser = safeJsonParse<User>(localStorage.getItem("user"));
-    const storedToken = localStorage.getItem("token");
-    if (storedUser) setUser(storedUser);
-    if (storedToken) setToken(storedToken);
-  }, []);
-
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -48,32 +41,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const fetchMe = async (jwt: string): Promise<User | null> => {
-    const res = await fetch(`${API_URL}/user/me`, {
-      headers: { Authorization: `Bearer ${jwt}` },
-    });
-    if (!res.ok) return null;
-    const me = await res.json(); 
-    return { id: me.id, name: me.name, email: me.email };
+    try {
+      const res = await fetch(`${API_URL}/user/me`, {
+        headers: { Authorization: `Bearer ${jwt}` },
+      });
+      if (!res.ok) return null;
+      const me = await res.json();
+      return { id: me.id, name: me.name, email: me.email };
+    } catch {
+      return null;
+    }
   };
 
   const refreshMe = async () => {
     const jwt = localStorage.getItem("token");
     if (!jwt) return false;
 
-    try {
-      const me = await fetchMe(jwt);
-      if (!me) {
-        logout();
-        return false;
-      }
-      setUser(me);
-      setToken(jwt);
-      localStorage.setItem("user", JSON.stringify(me));
-      return true;
-    } catch {
+    const me = await fetchMe(jwt);
+    if (!me) {
+      logout();
       return false;
     }
+
+    setUser(me);
+    setToken(jwt);
+    localStorage.setItem("user", JSON.stringify(me));
+    return true;
   };
+
+useEffect(() => {
+  const storedToken = localStorage.getItem("token");
+  if (storedToken && !user) {
+    refreshMe();
+  }
+}, [user]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -84,14 +85,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (!res.ok) return false;
 
-      const data = await res.json(); 
+      const data = await res.json();
       if (!data?.token) return false;
 
       localStorage.setItem("token", data.token);
       setToken(data.token);
 
       const me = await fetchMe(data.token);
-      if (!me) return false;
+      if (!me) {
+        logout();
+        return false;
+      }
 
       setUser(me);
       localStorage.setItem("user", JSON.stringify(me));
@@ -110,14 +114,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (!res.ok) return false;
 
-      const data = await res.json(); 
+      const data = await res.json();
       if (!data?.token) return false;
 
       localStorage.setItem("token", data.token);
       setToken(data.token);
 
       const me = await fetchMe(data.token);
-      if (!me) return false;
+      if (!me) {
+        logout();
+        return false;
+      }
 
       setUser(me);
       localStorage.setItem("user", JSON.stringify(me));

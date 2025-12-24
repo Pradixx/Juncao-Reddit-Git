@@ -1,42 +1,53 @@
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
+import { useIdeas } from "../contexts/IdeasContext";
+
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { myIdeas } = useIdeas();
+  const [copied, setCopied] = useState(false);
+
+  const total = useMemo(() => myIdeas.length, [myIdeas]);
+
+  async function copyEmail() {
+    if (!user?.email) return;
+    try {
+      await navigator.clipboard.writeText(user.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch {
+      // ignora
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="container-app py-8">
-        <div className="mx-auto w-full max-w-2xl">
-          <Card>
-            <CardHeader>
-              <CardTitle>Perfil</CardTitle>
-              <CardDescription>Informações da sua conta.</CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-4">
-              <div className="rounded-xl border bg-card p-4">
-                <div className="text-sm text-muted-foreground">Nome</div>
-                <div className="text-base font-medium">{user?.name ?? "—"}</div>
+      <div className="w-full bg-gradient-to-b from-muted/40 via-background to-background">
+        <main className="container-app py-8">
+          <div className="mx-auto w-full max-w-3xl space-y-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Perfil</h1>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Dados vêm de <code>/api/user/me</code>.
+                </p>
               </div>
 
-              <div className="rounded-xl border bg-card p-4">
-                <div className="text-sm text-muted-foreground">Email</div>
-                <div className="text-base font-medium">{user?.email ?? "—"}</div>
-              </div>
-
-              <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3">
+              <div className="flex gap-2">
                 <Button variant="outline" onClick={() => navigate("/dashboard")}>
-                  Voltar
+                  Dashboard
                 </Button>
                 <Button
-                  variant="destructive"
+                  variant="danger"
                   onClick={() => {
                     logout();
                     navigate("/login");
@@ -45,10 +56,58 @@ export default function ProfilePage() {
                   Sair
                 </Button>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <Card className="md:col-span-2">
+                <CardHeader>
+                  <CardTitle>Informações</CardTitle>
+                  <CardDescription>Seu perfil básico.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs text-muted-foreground">Nome</span>
+                    <div className="text-base font-medium">{user?.name ?? "—"}</div>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs text-muted-foreground">Email</span>
+                      <div className="text-sm font-medium">{user?.email ?? "—"}</div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" onClick={copyEmail}>
+                        {copied ? "Copiado!" : "Copiar"}
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    <Badge variant="secondary">Token via AuthContext</Badge>
+                    <Badge variant="secondary">JWT → Ideas API</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Ideias</CardTitle>
+                  <CardDescription>Resumo</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="text-3xl font-semibold">{total}</div>
+                  <p className="text-xs text-muted-foreground">
+                    Total das suas ideias (endpoint <code>/my-ideas</code>)
+                  </p>
+                  <Button className="w-full" onClick={() => navigate("/ideas")}>
+                    Ver ideias
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

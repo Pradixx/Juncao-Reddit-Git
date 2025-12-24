@@ -5,13 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 import Header from "../components/Header";
 import { Button } from "../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
@@ -66,6 +60,7 @@ export default function CreateIdeaPage() {
         return;
       }
 
+      // segue seu fluxo: criar -> lista
       navigate("/ideas");
     } catch {
       setError("Erro inesperado ao criar a ideia.");
@@ -78,85 +73,87 @@ export default function CreateIdeaPage() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="container-app py-8">
-        <div className="mx-auto w-full max-w-2xl">
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold tracking-tight">Criar nova ideia</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Escreva o título e descreva bem a ideia. Depois você pode editar.
-            </p>
-          </div>
-
-          {error && (
-            <div className="mb-4">
-              <Alert>
-                <AlertTitle>Algo deu errado</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
+      <div className="w-full bg-gradient-to-b from-muted/40 via-background to-background">
+        <main className="container-app py-8">
+          <div className="mx-auto w-full max-w-2xl">
+            <div className="mb-6">
+              <h1 className="text-2xl font-semibold tracking-tight">Criar nova ideia</h1>
+              <p className="text-sm text-muted-foreground mt-1">
+                Escreva um título claro e descreva bem a ideia. Depois você pode editar.
+              </p>
             </div>
-          )}
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Detalhes da ideia</CardTitle>
-              <CardDescription>Preencha as informações abaixo.</CardDescription>
-            </CardHeader>
+            {error && (
+              <div className="mb-4">
+                <Alert>
+                  <AlertTitle>Algo deu errado</AlertTitle>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              </div>
+            )}
 
-            <CardContent>
-              <form onSubmit={onSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Título</label>
-                  <Input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Ex: App para organizar tarefas com IA"
-                    autoFocus
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>Mínimo 3 caracteres</span>
-                    <span>{titleLen}/80</span>
+            <Card>
+              <CardHeader>
+                <CardTitle>Detalhes da ideia</CardTitle>
+                <CardDescription>Preencha as informações abaixo.</CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                <form onSubmit={onSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Título</label>
+                    <Input
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="Ex: App para organizar tarefas com IA"
+                      autoFocus
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>Mínimo 3 caracteres</span>
+                      <span>{titleLen}/80</span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Descrição</label>
-                  <Textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Descreva o problema, a solução e como você imagina usar isso..."
-                    rows={6}
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>Mínimo 10 caracteres</span>
-                    <span>{descLen}/800</span>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Descrição</label>
+                    <Textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Descreva o problema, a solução e como você imagina usar isso..."
+                      rows={6}
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>Mínimo 10 caracteres</span>
+                      <span>{descLen}/800</span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3 pt-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => navigate(-1)}
-                    disabled={submitting}
-                  >
-                    Cancelar
-                  </Button>
+                  <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3 pt-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => navigate(-1)}
+                      disabled={submitting}
+                    >
+                      Cancelar
+                    </Button>
 
-                  <Button type="submit" disabled={!canSubmit}>
-                    {submitting ? "Criando..." : "Criar ideia"}
-                  </Button>
-                </div>
+                    <Button type="submit" disabled={!canSubmit}>
+                      {submitting ? "Criando..." : "Criar ideia"}
+                    </Button>
+                  </div>
 
-                {!user && (
-                  <p className="text-xs text-muted-foreground pt-2">
-                    Você não está logado. Faça login para criar ideias.
-                  </p>
-                )}
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
+                  {!user && (
+                    <p className="text-xs text-muted-foreground pt-2">
+                      Você não está logado. Faça login para criar ideias.
+                    </p>
+                  )}
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

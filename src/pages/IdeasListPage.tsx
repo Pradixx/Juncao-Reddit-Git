@@ -1,79 +1,143 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import IdeaCard from "../components/IdeaCard";
 import { useIdeas } from "../contexts/IdeasContext";
 
 import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
+import { Input } from "../components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
+import { Skeleton } from "../components/ui/skeleton";
 
 export default function IdeasListPage() {
   const navigate = useNavigate();
-  const { ideas, deleteIdea, loading } = useIdeas();
+  const [params, setParams] = useSearchParams();
+  const { ideas, myIdeas, loading, deleteIdea, refreshAll, refreshMine } = useIdeas();
 
+  const [q, setQ] = useState("");
   const [error, setError] = useState("");
 
-  async function onDelete(id: string) {
-    setError("");
-    const ok = await deleteIdea(id);
-    if (!ok) setError("Não foi possível excluir. Talvez você não seja o autor (403) ou o token expirou.");
-  }
+  // Se vier /ideas?delete=ID (atalho do dashboard)
+  useEffect(() => {
+    const id = params.get("delete");
+    if (!id) return;
+
+    (async () => {
+      const ok = await deleteIdea(id);
+      if (!ok) setError("Não foi possível excluir. Verifique se a ideia é sua.");
+      params.delete("delete");
+      setParams(params, { replace: true });
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const list = useMemo(() => {
+    const merged = [...myIdeas];
+    const rest = ideas.filter((i) => !merged.find((m) => m.id === i.id));
+    const all = [...merged, ...rest];
+
+    const query = q.trim().toLowerCase();
+    if (!query) return all;
+
+    return all.filter((i) => {
+      return (
+        i.title.toLowerCase().includes(query) ||
+        i.description.toLowerCase().includes(query)
+      );
+    });
+  }, [ideas, myIdeas, q]);
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="container-app py-8">
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold tracking-tight">Minhas ideias</h1>
-              <p className="text-sm text-muted-foreground">
-                Todas as ideias que o backend retornou para o seu usuário.
-              </p>
-            </div>
+      <div className="w-full bg-gradient-to-b from-muted/40 via-background to-background">
+        <main className="container-app py-8">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div className="space-y-1">
+                <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
+                  Ideias
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Lista completa (todas) + suas ideias. Busca por título/descrição.
+                </p>
+              </div>
 
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={() => navigate("/dashboard")}>
-                Dashboard
-              </Button>
-              <Button onClick={() => navigate("/create-idea")}>Nova ideia</Button>
-            </div>
-          </div>
-
-          {error && (
-            <Alert>
-              <AlertTitle>Erro</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
-          {loading && <p className="text-sm text-muted-foreground">Carregando...</p>}
-
-          {!loading && ideas.length === 0 && (
-            <div className="rounded-xl border bg-card p-6">
-              <p className="text-sm text-muted-foreground">Nenhuma ideia encontrada.</p>
-              <div className="mt-3">
-                <Button onClick={() => navigate("/create-idea")}>Criar minha primeira ideia</Button>
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={() => navigate("/create-idea")}>Nova ideia</Button>
+                <Button
+                  variant="outline"
+                  onClick={async () => {
+                    setError("");
+                    await Promise.all([refreshAll(), refreshMine()]);
+                  }}
+                >
+                  Atualizar
+                </Button>
               </div>
             </div>
-          )}
 
-          <div className="grid gap-4 md:grid-cols-2">
-            {ideas.map((idea) => (
-              <IdeaCard
-                key={idea.id}
-                id={idea.id}
-                title={idea.title}
-                description={idea.description}
-                createdAt={idea.createdAt}
-                onDelete={() => onDelete(idea.id)}
-                onEdit={() => navigate(`/edit-idea/${idea.id}`)}
-              />
-            ))}
+            {error && (
+              <Alert>
+                <AlertTitle>Ops</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <Card>
+              <CardHeader className="space-y-2">
+                <CardTitle>Gerenciar</CardTitle>
+                <CardDescription>
+                  Dica: ideias suas têm ações de editar/excluir (o backend valida pelo <code>authorId</code> vindo do token).
+                </CardDescription>
+                <div className="pt-2">
+                  <Input
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    placeholder="Buscar ideias..."
+                  />
+                </div>
+              </CardHeader>
+
+              <CardContent className="space-y-3">
+                {loading ? (
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <Skeleton className="h-40 w-full rounded-lg" />
+                    <Skeleton className="h-40 w-full rounded-lg" />
+                    <Skeleton className="h-40 w-full rounded-lg" />
+                    <Skeleton className="h-40 w-full rounded-lg" />
+                  </div>
+                ) : list.length === 0 ? (
+                  <div className="py-10 text-center text-sm text-muted-foreground">
+                    Nada encontrado.
+                  </div>
+                ) : (
+                  <div className="grid gap-3 md:grid-cols-2">
+                    {list.map((idea) => (
+                      <IdeaCard
+                        key={idea.id}
+                        id={idea.id}
+                        title={idea.title}
+                        description={idea.description}
+                        createdAt={idea.createdAt}
+                        onEdit={() => navigate(`/edit-idea/${idea.id}`)}
+                        onDelete={async () => {
+                          setError("");
+                          const ok = await deleteIdea(idea.id);
+                          if (!ok) setError("Não foi possível excluir. Verifique se a ideia é sua.");
+                        }}
+                        showActions
+                      />
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

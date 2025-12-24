@@ -1,16 +1,6 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-
-import { Button } from "../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
-import { Input } from "../components/ui/input";
-import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
-
-function isStrongPassword(pw: string) {
-  return /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/.test(pw);
-}
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -19,112 +9,140 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const nameOk = name.trim().length >= 3;
-  const passOk = password.length >= 8 && isStrongPassword(password);
-
   const canSubmit = useMemo(() => {
-    return nameOk && email.trim().length > 0 && passOk && !submitting;
-  }, [nameOk, email, passOk, submitting]);
+    return (
+      name.trim().length >= 3 &&
+      email.trim().length > 0 &&
+      password.length >= 8 &&
+      password === confirm &&
+      !submitting
+    );
+  }, [name, email, password, confirm, submitting]);
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    setSubmitting(true);
 
+    if (password !== confirm) {
+      setError("As senhas não conferem.");
+      return;
+    }
+
+    setSubmitting(true);
     try {
       const ok = await register(name.trim(), email.trim(), password);
       if (!ok) {
-        setError("Não foi possível registrar. Verifique os dados e tente novamente.");
+        setError("Não foi possível criar a conta. Verifique os dados e tente novamente.");
         return;
       }
       navigate("/dashboard");
-    } catch {
-      setError("Erro inesperado ao registrar.");
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="page flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md text-center">
+        <div className="mx-auto h-10 w-10 grid place-items-center rounded-2xl bg-blue-600 text-white font-bold">💡</div>
+        <h1 className="mt-4 text-3xl font-bold text-slate-900">Criar conta</h1>
+        <p className="mt-2 text-slate-600">Comece a organizar suas ideias agora</p>
 
-      <main className="container-app py-10">
-        <div className="mx-auto w-full max-w-md">
+        <div className="mt-8 card-soft p-6 text-left">
           {error && (
-            <div className="mb-4">
-              <Alert>
-                <AlertTitle>Registro falhou</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
+            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {error}
             </div>
           )}
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Criar conta</CardTitle>
-              <CardDescription>Preencha os dados para começar.</CardDescription>
-            </CardHeader>
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-slate-900">Nome de usuário</label>
+              <div className="mt-2">
+                <input
+                  className="h-11 w-full rounded-lg border border-slate-200 bg-white px-3 outline-none focus:ring-4 focus:ring-blue-100"
+                  placeholder="seu_nome"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="name"
+                />
+              </div>
+            </div>
 
-            <CardContent>
-              <form className="space-y-4" onSubmit={onSubmit}>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Nome</label>
-                  <Input
-                    placeholder="Seu nome"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                  {!nameOk && <p className="text-xs text-muted-foreground">Mínimo 3 caracteres.</p>}
-                </div>
+            <div>
+              <label className="text-sm font-medium text-slate-900">Email</label>
+              <div className="mt-2">
+                <input
+                  className="h-11 w-full rounded-lg border border-slate-200 bg-white px-3 outline-none focus:ring-4 focus:ring-blue-100"
+                  placeholder="seu@email.com"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                />
+              </div>
+            </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Email</label>
-                  <Input
-                    type="email"
-                    placeholder="seuemail@exemplo.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
+            <div>
+              <label className="text-sm font-medium text-slate-900">Senha</label>
+              <div className="mt-2">
+                <input
+                  className="h-11 w-full rounded-lg border border-slate-200 bg-white px-3 outline-none focus:ring-4 focus:ring-blue-100"
+                  placeholder="********"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="new-password"
+                />
+              </div>
+              <p className="mt-2 text-xs text-slate-500">
+                Necessário ter caractere maiúscula, minúscula, número e caractere especial.
+              </p>
+            </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Senha</label>
-                  <Input
-                    type="password"
-                    placeholder="Crie uma senha forte"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Deve conter: maiúscula, minúscula, número e caractere especial (@#$%^&+=).
-                  </p>
-                </div>
+            <div>
+              <label className="text-sm font-medium text-slate-900">Confirmar senha</label>
+              <div className="mt-2">
+                <input
+                  className="h-11 w-full rounded-lg border border-slate-200 bg-white px-3 outline-none focus:ring-4 focus:ring-blue-100"
+                  placeholder="********"
+                  type="password"
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  autoComplete="new-password"
+                />
+              </div>
+            </div>
 
-                <div className="flex flex-col gap-2 sm:flex-row sm:justify-end sm:gap-3">
-                  <Button type="button" variant="outline" onClick={() => navigate("/login")} disabled={submitting}>
-                    Já tenho conta
-                  </Button>
-                  <Button type="submit" disabled={!canSubmit}>
-                    {submitting ? "Criando..." : "Criar conta"}
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            Já tem conta?{" "}
-            <button className="underline underline-offset-4" onClick={() => navigate("/login")}>
-              Entrar
+            <button
+              type="submit"
+              disabled={!canSubmit}
+              className="h-11 w-full rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-60 disabled:hover:bg-blue-600"
+            >
+              {submitting ? "Criando..." : "Criar conta"}
             </button>
-          </p>
+
+            <p className="text-center text-sm text-slate-600">
+              Já tem uma conta?{" "}
+              <Link to="/login" className="text-blue-700 hover:underline font-medium">
+                Faça login aqui
+              </Link>
+            </p>
+          </form>
         </div>
-      </main>
+
+        <button
+          onClick={() => navigate("/")}
+          className="mt-6 text-sm text-slate-600 hover:text-slate-900"
+        >
+          ← Voltar para página inicial
+        </button>
+      </div>
     </div>
   );
 }
