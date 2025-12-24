@@ -1,108 +1,141 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
-import { Button } from "../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { useIdeas } from "../contexts/IdeasContext";
 
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
+
 export default function EditIdeaPage() {
-  const { id } = useParams<{ id: string }>();
-  const { getIdea, updateIdea } = useIdeas();
+  const { id } = useParams();
   const navigate = useNavigate();
+  const { getIdea, updateIdea } = useIdeas();
 
-  const idea = useMemo(() => (id ? getIdea(id) : undefined), [getIdea, id]);
+  const existing = id ? getIdea(id) : undefined;
 
-  const [title, setTitle] = useState(idea?.title ?? "");
-  const [description, setDescription] = useState(idea?.description ?? "");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState(existing?.title ?? "");
+  const [description, setDescription] = useState(existing?.description ?? "");
 
-  useEffect(() => {
-    if (!idea) return;
-    setTitle(idea.title);
-    setDescription(idea.description);
-  }, [idea]);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!id) navigate("/ideas");
-  }, [id, navigate]);
+    if (existing) {
+      setTitle(existing.title);
+      setDescription(existing.description);
+    }
+  }, [id, existing, navigate]);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const titleLen = title.trim().length;
+  const descLen = description.trim().length;
+
+  const canSubmit = useMemo(() => {
+    return titleLen >= 3 && descLen >= 10 && !submitting;
+  }, [titleLen, descLen, submitting]);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError("");
     if (!id) return;
 
-    setError(null);
-    setLoading(true);
+    if (titleLen < 3) {
+      setError("O título precisa ter pelo menos 3 caracteres.");
+      return;
+    }
+    if (descLen < 10) {
+      setError("A descrição precisa ter pelo menos 10 caracteres.");
+      return;
+    }
 
-    const ok = await updateIdea(id, { title, description });
-    setLoading(false);
+    setSubmitting(true);
+    try {
+      const ok = await updateIdea(id, {
+        title: title.trim(),
+        description: description.trim(),
+      });
 
-    if (ok) navigate(`/view-idea/${id}`);
-    else setError("Erro ao atualizar ideia.");
-  };
+      if (!ok) {
+        setError("Não foi possível atualizar. Se você não for o autor, o backend retorna 403.");
+        return;
+      }
 
-  if (!idea) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <main className="mx-auto max-w-6xl px-4 py-10 text-sm text-muted-foreground">
-          Ideia não encontrada. <button className="underline" onClick={() => navigate("/ideas")}>Voltar</button>
-        </main>
-      </div>
-    );
+      navigate("/ideas");
+    } catch {
+      setError("Erro inesperado ao salvar.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main className="container-app py-8">
         <div className="mx-auto w-full max-w-2xl">
+          <div className="mb-6">
+            <h1 className="text-2xl font-semibold tracking-tight">Editar ideia</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Atualize o título e a descrição.
+            </p>
+          </div>
+
+          {error && (
+            <div className="mb-4">
+              <Alert>
+                <AlertTitle>Algo deu errado</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            </div>
+          )}
+
           <Card>
             <CardHeader>
-              <CardTitle>Editar ideia</CardTitle>
-              <CardDescription>Atualize os campos e salve.</CardDescription>
+              <CardTitle>Detalhes</CardTitle>
+              <CardDescription>Altere apenas o necessário.</CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-4">
-              {error && (
-                <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                  {error}
-                </div>
-              )}
-
-              <form className="space-y-3" onSubmit={handleSubmit}>
-                <div className="space-y-1">
+            <CardContent>
+              <form className="space-y-4" onSubmit={onSubmit}>
+                <div className="space-y-2">
                   <label className="text-sm font-medium">Título</label>
-                  <input
-                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                  />
+                  <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Mínimo 3 caracteres</span>
+                    <span>{titleLen}/80</span>
+                  </div>
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <label className="text-sm font-medium">Descrição</label>
-                  <textarea
-                    className="min-h-[140px] w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                  />
+                  <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={6} />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Mínimo 10 caracteres</span>
+                    <span>{descLen}/800</span>
+                  </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 justify-end">
-                  <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3 pt-2">
+                  <Button type="button" variant="outline" onClick={() => navigate(-1)} disabled={submitting}>
                     Cancelar
                   </Button>
-                  <Button disabled={loading} type="submit">
-                    {loading ? "Salvando..." : "Salvar"}
+                  <Button type="submit" disabled={!canSubmit}>
+                    {submitting ? "Salvando..." : "Salvar alterações"}
                   </Button>
                 </div>
               </form>
             </CardContent>
           </Card>
+
+          {!existing && (
+            <p className="mt-3 text-xs text-muted-foreground">
+              Se a ideia não apareceu aqui, volte para a lista e tente abrir de novo.
+            </p>
+          )}
         </div>
       </main>
     </div>

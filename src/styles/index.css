@@ -19,11 +19,7 @@ html, body, #root {
   color: var(--foreground);
 }
 
-/* =======================
-   2. VARIÁVEIS DE TEMA
-   ======================= */
 :root {
-  /* CORES PRINCIPAIS */
   --background: #f5f5f7;
   --foreground: #1a1a1a;
   --primary: #3b82f6;
@@ -35,24 +31,20 @@ html, body, #root {
   --danger: #ef4444;
   --success: #10b981;
   
-  /* TIPOGRAFIA */
   --font-family-base: 'Inter', sans-serif;
-  --font-xs: 0.75rem;    /* 12px */
-  --font-sm: 0.875rem;   /* 14px */
-  --font-base: 1rem;     /* 16px */
-  --font-lg: 1.125rem;   /* 18px */
-  --font-xl: 1.25rem;    /* 20px */
-  --font-2xl: 1.5rem;    /* 24px */
-  --font-3xl: 1.875rem;  /* 30px */
-  
-  /* BORDAS / SOMBRAS */
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem; 
+  --font-base: 1rem; 
+  --font-lg: 1.125rem; 
+  --font-xl: 1.25rem; 
+  --font-2xl: 1.5rem;
+  --font-3xl: 1.875rem; 
   --radius: 0.5rem;
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
   --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
   --shadow-lg: 0 10px 15px rgba(0,0,0,0.15);
 }
 
-/* DARK MODE */
 body.dark {
   --background: #1f2937;
   --foreground: #f3f4f6;
@@ -66,18 +58,12 @@ body.dark {
   --success: #34d399;
 }
 
-/* =======================
-   3. TIPOGRAFIA
-   ======================= */
 h1 { font-size: var(--font-3xl); font-weight: 700; }
 h2 { font-size: var(--font-2xl); font-weight: 600; }
 h3 { font-size: var(--font-xl); font-weight: 500; }
 p, span, label { font-size: var(--font-base); line-height: 1.5; }
 small { font-size: var(--font-sm); color: var(--muted); }
 
-/* =======================
-   4. LAYOUT E CONTAINERS
-   ======================= */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -94,9 +80,6 @@ small { font-size: var(--font-sm); color: var(--muted); }
 .gap-4 { gap: 1rem; }
 .gap-6 { gap: 1.5rem; }
 
-/* =======================
-   5. BOTOES
-   ======================= */
 .btn {
   padding: 0.5rem 1rem;
   border-radius: var(--radius);
@@ -131,9 +114,6 @@ small { font-size: var(--font-sm); color: var(--muted); }
   color: #fff;
 }
 
-/* =======================
-   6. INPUTS / TEXTAREAS
-   ======================= */
 input, textarea, select {
   width: 100%;
   padding: 0.5rem 0.75rem;
@@ -149,9 +129,6 @@ input:focus, textarea:focus, select:focus {
   box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
 }
 
-/* =======================
-   7. CARDS
-   ======================= */
 .card {
   background-color: #fff;
   padding: 1rem;
@@ -165,9 +142,6 @@ input:focus, textarea:focus, select:focus {
   box-shadow: var(--shadow-md);
 }
 
-/* =======================
-   8. ALERTS
-   ======================= */
 .alert {
   padding: 0.75rem 1rem;
   border-radius: var(--radius);
@@ -182,15 +156,10 @@ input:focus, textarea:focus, select:focus {
 .alert-warning { background-color: #facc15; color: #1f2937; }
 .alert-info { background-color: var(--primary); color: #fff; }
 
-/* =======================
-   9. LINKS
-   ======================= */
+
 a { text-decoration: none; color: var(--primary); transition: all 0.2s; }
 a:hover { color: var(--primary-hover); }
 
-/* =======================
-   10. RESPONSIVIDADE
-   ======================= */
 @media (max-width: 1024px) { .container { padding: 0 1rem; } }
 @media (max-width: 768px) { .flex-row { flex-direction: column; } }
 @media (max-width: 480px) {
@@ -199,9 +168,6 @@ a:hover { color: var(--primary-hover); }
   h3 { font-size: var(--font-lg); }
 }
 
-/* =======================
-   11. UTILIDADES
-   ======================= */
 .hidden { display: none !important; }
 .block { display: block !important; }
 .w-full { width: 100%; }
@@ -234,7 +200,6 @@ body {
   color: hsl(var(--foreground));
 }
 
-/* helpers */
 .page {
   @apply min-h-[calc(100vh-4rem)] bg-background;
 }

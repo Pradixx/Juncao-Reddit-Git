@@ -1,127 +1,128 @@
-import { FormEvent, useMemo, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { Button } from "../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { useAuth } from "../contexts/AuthContext";
 
-function passwordMeetsRules(pw: string) {
-  // backend: precisa maiúscula, minúscula, número e especial @#$%^&+=
-  const hasUpper = /[A-Z]/.test(pw);
-  const hasLower = /[a-z]/.test(pw);
-  const hasNumber = /[0-9]/.test(pw);
-  const hasSpecial = /[@#$%^&+=]/.test(pw);
-  const hasLen = pw.length >= 8;
-  return { hasUpper, hasLower, hasNumber, hasSpecial, hasLen };
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
+
+function isStrongPassword(pw: string) {
+  return /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$/.test(pw);
 }
 
 export default function RegisterPage() {
-  const { register } = useAuth();
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const rules = useMemo(() => passwordMeetsRules(password), [password]);
-  const allOk = rules.hasUpper && rules.hasLower && rules.hasNumber && rules.hasSpecial && rules.hasLen;
+  const nameOk = name.trim().length >= 3;
+  const passOk = password.length >= 8 && isStrongPassword(password);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const canSubmit = useMemo(() => {
+    return nameOk && email.trim().length > 0 && passOk && !submitting;
+  }, [nameOk, email, passOk, submitting]);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
+    setError("");
+    setSubmitting(true);
 
-    if (!allOk) {
-      setError("Senha não atende as regras do backend.");
-      return;
+    try {
+      const ok = await register(name.trim(), email.trim(), password);
+      if (!ok) {
+        setError("Não foi possível registrar. Verifique os dados e tente novamente.");
+        return;
+      }
+      navigate("/dashboard");
+    } catch {
+      setError("Erro inesperado ao registrar.");
+    } finally {
+      setSubmitting(false);
     }
-
-    setLoading(true);
-    const ok = await register(name, email, password);
-    setLoading(false);
-
-    if (ok) navigate("/dashboard");
-    else setError("Erro ao registrar. Verifique os dados e tente novamente.");
-  };
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto flex max-w-6xl px-4 py-10">
+      <main className="container-app py-10">
         <div className="mx-auto w-full max-w-md">
+          {error && (
+            <div className="mb-4">
+              <Alert>
+                <AlertTitle>Registro falhou</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            </div>
+          )}
+
           <Card>
             <CardHeader>
               <CardTitle>Criar conta</CardTitle>
-              <CardDescription>O backend exige senha forte (maiúscula/minúscula/número/especial).</CardDescription>
+              <CardDescription>Preencha os dados para começar.</CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-4">
-              {error && (
-                <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                  {error}
-                </div>
-              )}
-
-              <form className="space-y-3" onSubmit={handleSubmit}>
-                <div className="space-y-1">
+            <CardContent>
+              <form className="space-y-4" onSubmit={onSubmit}>
+                <div className="space-y-2">
                   <label className="text-sm font-medium">Nome</label>
-                  <input
-                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  <Input
+                    placeholder="Seu nome"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Seu nome"
-                    required
                   />
+                  {!nameOk && <p className="text-xs text-muted-foreground">Mínimo 3 caracteres.</p>}
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <label className="text-sm font-medium">Email</label>
-                  <input
-                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  <Input
                     type="email"
+                    placeholder="seuemail@exemplo.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="seuemail@dominio.com"
-                    required
                   />
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <label className="text-sm font-medium">Senha</label>
-                  <input
-                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  <Input
                     type="password"
+                    placeholder="Crie uma senha forte"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Crie uma senha forte"
-                    required
                   />
-
-                  <div className="mt-2 grid gap-1 text-xs text-muted-foreground">
-                    <div className={rules.hasLen ? "text-foreground" : ""}>• mínimo 8 caracteres</div>
-                    <div className={rules.hasUpper ? "text-foreground" : ""}>• 1 letra maiúscula</div>
-                    <div className={rules.hasLower ? "text-foreground" : ""}>• 1 letra minúscula</div>
-                    <div className={rules.hasNumber ? "text-foreground" : ""}>• 1 número</div>
-                    <div className={rules.hasSpecial ? "text-foreground" : ""}>• 1 especial (@#$%^&+=)</div>
-                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Deve conter: maiúscula, minúscula, número e caractere especial (@#$%^&+=).
+                  </p>
                 </div>
 
-                <Button className="w-full" disabled={loading} type="submit">
-                  {loading ? "Criando..." : "Criar conta"}
-                </Button>
+                <div className="flex flex-col gap-2 sm:flex-row sm:justify-end sm:gap-3">
+                  <Button type="button" variant="outline" onClick={() => navigate("/login")} disabled={submitting}>
+                    Já tenho conta
+                  </Button>
+                  <Button type="submit" disabled={!canSubmit}>
+                    {submitting ? "Criando..." : "Criar conta"}
+                  </Button>
+                </div>
               </form>
-
-              <p className="text-center text-sm text-muted-foreground">
-                Já tem conta?{" "}
-                <Link className="font-medium text-foreground underline" to="/login">
-                  Entrar
-                </Link>
-              </p>
             </CardContent>
           </Card>
+
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            Já tem conta?{" "}
+            <button className="underline underline-offset-4" onClick={() => navigate("/login")}>
+              Entrar
+            </button>
+          </p>
         </div>
       </main>
     </div>

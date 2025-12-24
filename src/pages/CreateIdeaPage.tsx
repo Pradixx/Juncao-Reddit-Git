@@ -14,11 +14,7 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "../components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 
 export default function CreateIdeaPage() {
   const navigate = useNavigate();
@@ -66,9 +62,7 @@ export default function CreateIdeaPage() {
       });
 
       if (!ok) {
-        setError(
-          "Não foi possível criar a ideia. Verifique o backend e tente novamente."
-        );
+        setError("Não foi possível criar a ideia. Verifique o backend e tente novamente.");
         return;
       }
 
@@ -87,10 +81,8 @@ export default function CreateIdeaPage() {
       <main className="container-app py-8">
         <div className="mx-auto w-full max-w-2xl">
           <div className="mb-6">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Criar nova ideia
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <h1 className="text-2xl font-semibold tracking-tight">Criar nova ideia</h1>
+            <p className="text-sm text-muted-foreground mt-1">
               Escreva o título e descreva bem a ideia. Depois você pode editar.
             </p>
           </div>
@@ -107,9 +99,7 @@ export default function CreateIdeaPage() {
           <Card>
             <CardHeader>
               <CardTitle>Detalhes da ideia</CardTitle>
-              <CardDescription>
-                Preencha as informações abaixo.
-              </CardDescription>
+              <CardDescription>Preencha as informações abaixo.</CardDescription>
             </CardHeader>
 
             <CardContent>
@@ -121,9 +111,6 @@ export default function CreateIdeaPage() {
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Ex: App para organizar tarefas com IA"
                     autoFocus
-                    required
-                    minLength={3}
-                    maxLength={80}
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>Mínimo 3 caracteres</span>
@@ -138,9 +125,6 @@ export default function CreateIdeaPage() {
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Descreva o problema, a solução e como você imagina usar isso..."
                     rows={6}
-                    required
-                    minLength={10}
-                    maxLength={800}
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>Mínimo 10 caracteres</span>
@@ -148,7 +132,7 @@ export default function CreateIdeaPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end sm:gap-3">
+                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3 pt-2">
                   <Button
                     type="button"
                     variant="outline"
@@ -164,7 +148,7 @@ export default function CreateIdeaPage() {
                 </div>
 
                 {!user && (
-                  <p className="pt-2 text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground pt-2">
                     Você não está logado. Faça login para criar ideias.
                   </p>
                 )}

@@ -1,89 +1,108 @@
-import { FormEvent, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { Button } from "../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { useAuth } from "../contexts/AuthContext";
 
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
+
 export default function LoginPage() {
-  const { login } = useAuth();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = async (e: FormEvent) => {
+  const canSubmit = useMemo(() => {
+    return email.trim().length > 0 && password.trim().length >= 8 && !submitting;
+  }, [email, password, submitting]);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
+    setError("");
+    setSubmitting(true);
 
-    const ok = await login(email, password);
-    setLoading(false);
-
-    if (ok) navigate("/dashboard");
-    else setError("Credenciais inválidas ou usuário não encontrado.");
-  };
+    try {
+      const ok = await login(email.trim(), password);
+      if (!ok) {
+        setError("Login inválido. Verifique email/senha.");
+        return;
+      }
+      navigate("/dashboard");
+    } catch {
+      setError("Erro inesperado ao logar.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto flex max-w-6xl px-4 py-10">
+      <main className="container-app py-10">
         <div className="mx-auto w-full max-w-md">
+          {error && (
+            <div className="mb-4">
+              <Alert>
+                <AlertTitle>Não foi possível entrar</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            </div>
+          )}
+
           <Card>
             <CardHeader>
               <CardTitle>Entrar</CardTitle>
               <CardDescription>Use seu email e senha para acessar.</CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-4">
-              {error && (
-                <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                  {error}
-                </div>
-              )}
-
-              <form className="space-y-3" onSubmit={handleSubmit}>
-                <div className="space-y-1">
+            <CardContent>
+              <form className="space-y-4" onSubmit={onSubmit}>
+                <div className="space-y-2">
                   <label className="text-sm font-medium">Email</label>
-                  <input
-                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  <Input
                     type="email"
+                    placeholder="seuemail@exemplo.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="seuemail@dominio.com"
-                    required
                   />
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <label className="text-sm font-medium">Senha</label>
-                  <input
-                    className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  <Input
                     type="password"
+                    placeholder="********"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    required
                   />
+                  <p className="text-xs text-muted-foreground">Mínimo de 8 caracteres.</p>
                 </div>
 
-                <Button className="w-full" disabled={loading} type="submit">
-                  {loading ? "Entrando..." : "Entrar"}
-                </Button>
+                <div className="flex flex-col gap-2 sm:flex-row sm:justify-end sm:gap-3">
+                  <Button type="button" variant="outline" onClick={() => navigate("/register")} disabled={submitting}>
+                    Criar conta
+                  </Button>
+                  <Button type="submit" disabled={!canSubmit}>
+                    {submitting ? "Entrando..." : "Entrar"}
+                  </Button>
+                </div>
               </form>
-
-              <p className="text-center text-sm text-muted-foreground">
-                Não tem conta?{" "}
-                <Link className="font-medium text-foreground underline" to="/register">
-                  Criar agora
-                </Link>
-              </p>
             </CardContent>
           </Card>
+
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            Ainda não tem conta?{" "}
+            <button className="underline underline-offset-4" onClick={() => navigate("/register")}>
+              Registre-se
+            </button>
+          </p>
         </div>
       </main>
     </div>

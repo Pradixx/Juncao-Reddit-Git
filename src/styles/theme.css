@@ -31,7 +31,6 @@
   --radius: 0.75rem;
 }
 
-/* modo escuro (se você usar .dark no html/body) */
 .dark {
   --background: 222.2 84% 4.9%;
   --foreground: 210 40% 98%;

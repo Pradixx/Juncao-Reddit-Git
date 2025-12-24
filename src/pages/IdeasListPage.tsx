@@ -1,74 +1,78 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import IdeaCard from "../components/IdeaCard";
-import { Button } from "../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { useIdeas } from "../contexts/IdeasContext";
+
+import { Button } from "../components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 
 export default function IdeasListPage() {
   const navigate = useNavigate();
-  const { ideas, deleteIdea } = useIdeas();
+  const { ideas, deleteIdea, loading } = useIdeas();
 
-  const [query, setQuery] = useState("");
+  const [error, setError] = useState("");
 
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return ideas;
-    return ideas.filter((i) => (i.title + " " + i.description).toLowerCase().includes(q));
-  }, [ideas, query]);
+  async function onDelete(id: string) {
+    setError("");
+    const ok = await deleteIdea(id);
+    if (!ok) setError("Não foi possível excluir. Talvez você não seja o autor (403) ou o token expirou.");
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto max-w-6xl px-4 py-8 space-y-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold">Ideias</h1>
-            <p className="text-sm text-muted-foreground">Gerencie suas ideias criadas no microserviço.</p>
+      <main className="container-app py-8">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight">Minhas ideias</h1>
+              <p className="text-sm text-muted-foreground">
+                Todas as ideias que o backend retornou para o seu usuário.
+              </p>
+            </div>
+
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => navigate("/dashboard")}>
+                Dashboard
+              </Button>
+              <Button onClick={() => navigate("/create-idea")}>Nova ideia</Button>
+            </div>
           </div>
 
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => navigate("/dashboard")}>
-              Voltar
-            </Button>
-            <Button onClick={() => navigate("/create-idea")}>Nova ideia</Button>
+          {error && (
+            <Alert>
+              <AlertTitle>Erro</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          {loading && <p className="text-sm text-muted-foreground">Carregando...</p>}
+
+          {!loading && ideas.length === 0 && (
+            <div className="rounded-xl border bg-card p-6">
+              <p className="text-sm text-muted-foreground">Nenhuma ideia encontrada.</p>
+              <div className="mt-3">
+                <Button onClick={() => navigate("/create-idea")}>Criar minha primeira ideia</Button>
+              </div>
+            </div>
+          )}
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {ideas.map((idea) => (
+              <IdeaCard
+                key={idea.id}
+                id={idea.id}
+                title={idea.title}
+                description={idea.description}
+                createdAt={idea.createdAt}
+                onDelete={() => onDelete(idea.id)}
+                onEdit={() => navigate(`/edit-idea/${idea.id}`)}
+              />
+            ))}
           </div>
         </div>
-
-        <Card>
-          <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <CardTitle className="text-base">Lista</CardTitle>
-            <input
-              className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring sm:max-w-sm"
-              placeholder="Buscar por título ou descrição..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </CardHeader>
-          <CardContent>
-            {filtered.length === 0 ? (
-              <div className="py-10 text-center text-sm text-muted-foreground">
-                Nenhuma ideia encontrada.
-              </div>
-            ) : (
-              <div className="grid gap-4 md:grid-cols-2">
-                {filtered.map((idea) => (
-                  <IdeaCard
-                    key={idea.id}
-                    id={idea.id}
-                    title={idea.title}
-                    description={idea.description}
-                    createdAt={idea.createdAt}
-                    onDelete={() => deleteIdea(idea.id)}
-                    onEdit={() => navigate(`/edit-idea/${idea.id}`)}
-                  />
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
       </main>
     </div>
   );
