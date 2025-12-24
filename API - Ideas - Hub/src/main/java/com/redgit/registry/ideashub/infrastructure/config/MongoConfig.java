@@ -11,10 +11,10 @@ import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
-    @Value("${spring.data.mongodb.connection-string}")
+    @Value("${spring.data.mongodb.uri}")
     private String connectionString;
 
-    @Value("${mongodb.databaseName}")
+    @Value("${spring.data.mongodb.database}")
     private String databaseName;
 
     @Override
@@ -25,10 +25,10 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     @Override
     public MongoClient mongoClient() {
         ConnectionString connString = new ConnectionString(connectionString);
-        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+        MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connString)
                 .build();
 
-        return MongoClients.create(mongoClientSettings);
+        return MongoClients.create(settings);
     }
 }
