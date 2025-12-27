@@ -12,7 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 export default function EditIdeaPage() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { getIdea, updateIdea, deleteIdea } = useIdeas();
+  const { getIdea, updateIdea, deleteIdea, isOwner } = useIdeas();
 
   const idea = useMemo(() => (id ? getIdea(id) : undefined), [getIdea, id]);
 
@@ -25,6 +25,8 @@ export default function EditIdeaPage() {
   const titleLen = title.trim().length;
   const descLen = description.trim().length;
 
+  const owner = useMemo(() => isOwner(idea ?? null), [isOwner, idea]); 
+
   useEffect(() => {
     if (!idea) return;
     setTitle(idea.title ?? "");
@@ -32,8 +34,8 @@ export default function EditIdeaPage() {
   }, [idea]);
 
   const canSubmit = useMemo(
-    () => titleLen >= 3 && descLen >= 10 && !submitting,
-    [titleLen, descLen, submitting]
+    () => owner && titleLen >= 3 && descLen >= 10 && !submitting, 
+    [owner, titleLen, descLen, submitting]
   );
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -41,14 +43,23 @@ export default function EditIdeaPage() {
     setError("");
 
     if (!id) return;
+
+    if (!owner) {
+      setError("Você não tem permissão para editar esta ideia.");
+      return;
+    }
+
     if (titleLen < 3) return setError("O título precisa ter pelo menos 3 caracteres.");
     if (descLen < 10) return setError("A descrição precisa ter pelo menos 10 caracteres.");
 
     setSubmitting(true);
     try {
-      const ok = await updateIdea(id, { title: title.trim(), description: description.trim() });
+      const ok = await updateIdea(id, {
+        title: title.trim(),
+        description: description.trim(),
+      });
       if (!ok) {
-        setError("Não foi possível atualizar. (Provável: ideia não é sua / token inválido)");
+        setError("Não foi possível atualizar esta ideia.");
         return;
       }
       navigate(`/view-idea/${id}`);
@@ -62,11 +73,17 @@ export default function EditIdeaPage() {
   async function onDelete() {
     if (!id) return;
     setError("");
+
+    if (!owner) {
+      setError("Você não tem permissão para excluir esta ideia.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const ok = await deleteIdea(id);
       if (!ok) {
-        setError("Não foi possível excluir. Verifique se a ideia é sua.");
+        setError("Não foi possível excluir. Verifique suas permissões.");
         return;
       }
       navigate("/ideas");
@@ -96,7 +113,9 @@ export default function EditIdeaPage() {
         <main className="container-app py-10">
           <Alert>
             <AlertTitle>Ideia não encontrada</AlertTitle>
-            <AlertDescription>Essa ideia não está carregada. Volte para a lista e atualize.</AlertDescription>
+            <AlertDescription>
+              Essa ideia não está carregada. Volte para a lista e atualize.
+            </AlertDescription>
           </Alert>
           <div className="mt-4">
             <Button onClick={() => navigate("/ideas")}>Voltar para Ideias</Button>
@@ -117,7 +136,7 @@ export default function EditIdeaPage() {
               <div>
                 <h1 className="text-2xl font-semibold tracking-tight">Editar ideia</h1>
                 <p className="text-sm text-muted mt-1">
-                  Atualize o conteúdo. O backend valida se você é o autor.
+                  Atualize o conteúdo da sua ideia.
                 </p>
               </div>
 
@@ -125,11 +144,23 @@ export default function EditIdeaPage() {
                 <Button variant="outline" onClick={() => navigate(-1)} disabled={submitting}>
                   Voltar
                 </Button>
-                <Button variant="danger" onClick={onDelete} disabled={submitting}>
-                  Excluir
-                </Button>
+
+                {owner && (
+                  <Button variant="danger" onClick={onDelete} disabled={submitting}>
+                    Excluir
+                  </Button>
+                )}
               </div>
             </div>
+
+            {!owner && (
+              <Alert>
+                <AlertTitle>Somente leitura</AlertTitle>
+                <AlertDescription>
+                  Você pode visualizar esta ideia, mas não pode editar ou excluir.
+                </AlertDescription>
+              </Alert>
+            )}
 
             {error && (
               <Alert>
@@ -148,7 +179,11 @@ export default function EditIdeaPage() {
                 <form onSubmit={onSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Título</label>
-                    <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <Input
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      disabled={!owner || submitting} 
+                    />
                     <div className="flex justify-between text-xs text-muted">
                       <span>Mínimo 3 caracteres</span>
                       <span>{titleLen}/80</span>
@@ -161,6 +196,7 @@ export default function EditIdeaPage() {
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       rows={7}
+                      disabled={!owner || submitting} 
                     />
                     <div className="flex justify-between text-xs text-muted">
                       <span>Mínimo 10 caracteres</span>
@@ -177,6 +213,7 @@ export default function EditIdeaPage() {
                     >
                       Cancelar
                     </Button>
+
                     <Button type="submit" disabled={!canSubmit}>
                       {submitting ? "Salvando..." : "Salvar alterações"}
                     </Button>

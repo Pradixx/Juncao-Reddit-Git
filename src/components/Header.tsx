@@ -1,4 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "./ui/button";
 import { cn } from "../lib/utils";
@@ -14,10 +15,54 @@ export default function Header({ className }: HeaderProps) {
   const navClass = ({ isActive }: { isActive: boolean }) =>
     cn("app-navlink text-sm font-medium transition-colors", isActive && "is-active");
 
+  const [hidden, setHidden] = useState(false);
+  const lastYRef = useRef(0);
+  const tickingRef = useRef(false);
+
+  useEffect(() => {
+    lastYRef.current = window.scrollY;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+
+      if (tickingRef.current) return;
+      tickingRef.current = true;
+
+      requestAnimationFrame(() => {
+        const lastY = lastYRef.current;
+        const delta = y - lastY;
+
+        const nearTop = y < 24;
+        const scrollingDown = delta > 8;
+        const scrollingUp = delta < -8;
+
+        if (nearTop) {
+          setHidden(false);
+        } else if (scrollingDown) {
+          setHidden(true);
+        } else if (scrollingUp) {
+          setHidden(false);
+        }
+
+        lastYRef.current = y;
+        tickingRef.current = false;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className={cn("app-header sticky top-0 z-50 w-full", className)}>
+    <header
+      className={cn(
+        "app-header sticky top-0 z-50 w-full",
+        "app-header--fx",
+        hidden && "app-header--hidden",
+        className
+      )}
+    >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        {/* Brand */}
         <Link to="/" className="flex items-center gap-2">
           <div className="brand-badge grid h-9 w-9 place-items-center rounded-xl font-bold">
             I
@@ -29,7 +74,6 @@ export default function Header({ className }: HeaderProps) {
           </div>
         </Link>
 
-        {/* Nav */}
         <nav className="hidden items-center gap-6 md:flex">
           {isAuthenticated ? (
             <>
@@ -58,7 +102,6 @@ export default function Header({ className }: HeaderProps) {
           )}
         </nav>
 
-        {/* Actions */}
         <div className="flex items-center gap-2">
           {isAuthenticated ? (
             <>

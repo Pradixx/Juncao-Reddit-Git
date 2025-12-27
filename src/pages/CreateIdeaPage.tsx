@@ -56,7 +56,7 @@ export default function CreateIdeaPage() {
       });
 
       if (!ok) {
-        setError("Não foi possível criar a ideia. Verifique o backend e tente novamente.");
+        setError("Não foi possível criar a ideia. Tente novamente em instantes.");
         return;
       }
 

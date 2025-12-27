@@ -27,7 +27,6 @@ export default function DashboardPage() {
       <div className="w-full app-page-bg">
         <main className="container-app py-8">
           <div className="flex flex-col gap-6">
-            {/* Top */}
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -59,7 +58,6 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Stats */}
             <div className="grid gap-4 md:grid-cols-3">
               <Card>
                 <CardHeader className="pb-2">
@@ -74,7 +72,7 @@ export default function DashboardPage() {
                     <div className="text-3xl font-semibold">{stats.total}</div>
                   )}
                   <p className="mt-2 text-xs text-muted">
-                    Baseado em <code>/api/ideas/my-ideas</code>
+                    Baseado nas suas ideias cadastradas
                   </p>
                 </CardContent>
               </Card>
@@ -91,11 +89,7 @@ export default function DashboardPage() {
                 <CardContent className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div className="text-sm text-muted">
                     Quer manter tudo organizado? Use descrições com:
-                    <span className="text-strong font-medium">
-                      {" "}
-                      problema → solução → MVP
-                    </span>
-                    .
+                    <span className="text-strong font-medium"> problema → solução → MVP</span>.
                   </div>
                   <Button variant="outline" onClick={() => navigate("/create-idea")}>
                     Criar agora
@@ -104,7 +98,6 @@ export default function DashboardPage() {
               </Card>
             </div>
 
-            {/* Recent Ideas */}
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-3">
                 <h2 className="text-lg font-semibold tracking-tight">Suas ideias recentes</h2>
@@ -141,7 +134,7 @@ export default function DashboardPage() {
                       onEdit={() => navigate(`/edit-idea/${idea.id}`)}
                       onDelete={() => navigate(`/ideas?delete=${idea.id}`)}
                       showActions
-                      isOwner 
+                      isOwner={true}
                     />
                   ))}
                 </div>

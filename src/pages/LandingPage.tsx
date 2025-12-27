@@ -7,7 +7,6 @@ export default function LandingPage() {
 
   return (
     <div className="page">
-      {/* Topbar */}
       <header className="app-header">
         <div className="container-app h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -46,15 +45,16 @@ export default function LandingPage() {
       </header>
 
       <main className="container-app py-14">
-        {/* Hero */}
         <div className="text-center max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Organize Suas Ideias de Forma <br className="hidden md:block" />
+            Registre Suas Ideias de Forma <br className="hidden md:block" />
             Simples e Eficiente
           </h1>
+
           <p className="mt-5 text-muted text-base md:text-lg">
-            Um sistema moderno baseado em microserviços para gerenciar todas as suas ideias em um só lugar.
-            Crie, edite e organize suas inspirações de maneira profissional.
+            Um sistema moderno baseado em microserviços para gerenciar todas as suas ideias em um só lugar —
+            com segurança. Um lugar onde não poderão roubar suas ideias. Crie, edite e organize suas inspirações
+            de maneira profissional.
           </p>
 
           <div className="mt-8 flex items-center justify-center gap-3">
@@ -76,10 +76,26 @@ export default function LandingPage() {
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { title: "Gestão de Ideias", desc: "Crie, edite e organize suas ideias com título, descrição e metadados.", icon: "💡" },
-            { title: "Autenticação JWT", desc: "Sistema seguro de autenticação com tokens JWT e controle de acesso.", icon: "🛡️" },
-            { title: "Controle de Autoria", desc: "Apenas o autor pode editar ou excluir suas próprias ideias.", icon: "👥" },
-            { title: "Microserviços", desc: "Arquitetura moderna com Spring Boot e serviços separados.", icon: "⚡" },
+            {
+              title: "Gestão de Ideias",
+              desc: "Crie, edite e organize suas ideias com título, descrição e metadados.",
+              icon: "💡",
+            },
+            {
+              title: "Autenticação JWT",
+              desc: "Sistema seguro de autenticação com tokens JWT e controle de acesso.",
+              icon: "🛡️",
+            },
+            {
+              title: "Controle de Autoria",
+              desc: "Apenas o autor pode editar ou excluir suas próprias ideias.",
+              icon: "👥",
+            },
+            {
+              title: "Microserviços",
+              desc: "Arquitetura moderna com Spring Boot e serviços separados.",
+              icon: "⚡",
+            },
           ].map((c) => (
             <div key={c.title} className="feature-card p-6">
               <div className="h-11 w-11 rounded-2xl bg-white/10 grid place-items-center text-lg">
@@ -94,7 +110,7 @@ export default function LandingPage() {
         <div className="mt-14 feature-card p-8">
           <h2 className="text-center font-semibold">Tecnologias Utilizadas</h2>
           <p className="mt-2 text-center text-sm text-muted">
-            Frontend (React + Vite + Tailwind) • Auth (Spring Security + JWT) • IdeasHub (Spring Boot + MongoDB)
+            Frontend (React + Vite + Tailwind) • Auth (Spring Security + JWT + MySQL) • IdeasHub (Spring Boot + MongoDB)
           </p>
         </div>
       </main>

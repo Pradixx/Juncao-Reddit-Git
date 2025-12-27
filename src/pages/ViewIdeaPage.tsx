@@ -88,23 +88,21 @@ export default function ViewIdeaPage() {
               </div>
             </div>
 
-            {/* Meta */}
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">Detalhes</CardTitle>
                 <CardDescription>
-                  Informações da ideia e autoria (o backend valida por <code>authorId</code>).
+                  Informações gerais da ideia.
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-2 text-sm">
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-muted">Autor</span>
-                  <span className="font-medium">{idea.authorId || "—"}</span>
+                  <span className="text-muted">Acesso</span>
+                  <span className="font-medium">{owner ? "Você é o autor" : "Somente leitura"}</span>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Conteúdo */}
             <Card>
               <CardHeader>
                 <CardTitle>Descrição</CardTitle>

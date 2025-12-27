@@ -363,3 +363,22 @@ button:focus-visible {
   color: rgba(232, 238, 252, 0.6);
 }
 
+/* =========================
+   HEADER (auto-hide + blur)
+========================= */
+.app-header--fx {
+  /* fundo levemente translúcido para ficar bonito em cima do page-bg */
+  background: rgba(11, 15, 26, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  transition: transform 200ms ease, background 200ms ease, border-color 200ms ease;
+  will-change: transform;
+}
+
+.app-header--hidden {
+  transform: translateY(-110%);
+}
+

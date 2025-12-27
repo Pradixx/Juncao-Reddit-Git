@@ -5,13 +5,7 @@ import IdeaCard from "../components/IdeaCard";
 import { useIdeas } from "../contexts/IdeasContext";
 
 import { Button } from "../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 import { Skeleton } from "../components/ui/skeleton";
@@ -19,6 +13,7 @@ import { Skeleton } from "../components/ui/skeleton";
 export default function IdeasListPage() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
+
   const {
     ideas,
     myIdeas,
@@ -36,13 +31,21 @@ export default function IdeasListPage() {
     const id = params.get("delete");
     if (!id) return;
 
+    let cancelled = false;
+
     (async () => {
       const ok = await deleteIdea(id);
-      if (!ok) setError("Não foi possível excluir. Verifique se a ideia é sua.");
-      params.delete("delete");
-      setParams(params, { replace: true });
+      if (!cancelled && !ok) setError("Não foi possível excluir. Verifique se a ideia é sua.");
+
+      const next = new URLSearchParams(params);
+      next.delete("delete");
+      setParams(next, { replace: true });
     })();
-  }, []);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [params, setParams, deleteIdea]);
 
   const list = useMemo(() => {
     const merged = [...myIdeas];
@@ -52,11 +55,12 @@ export default function IdeasListPage() {
     const query = q.trim().toLowerCase();
     if (!query) return all;
 
-    return all.filter(
-      (i) =>
+    return all.filter((i) => {
+      return (
         i.title.toLowerCase().includes(query) ||
         i.description.toLowerCase().includes(query)
-    );
+      );
+    });
   }, [ideas, myIdeas, q]);
 
   return (
@@ -101,10 +105,8 @@ export default function IdeasListPage() {
               <CardHeader className="space-y-2">
                 <CardTitle>Gerenciar</CardTitle>
                 <CardDescription>
-                  Dica: ideias suas têm ações de editar/excluir (o backend valida
-                  pelo <code>authorId</code> vindo do token).
+                  Dica: suas ideias mostram ações de editar e excluir.
                 </CardDescription>
-
                 <div className="pt-2">
                   <Input
                     value={q}
@@ -139,13 +141,10 @@ export default function IdeasListPage() {
                         onDelete={async () => {
                           setError("");
                           const ok = await deleteIdea(idea.id);
-                          if (!ok)
-                            setError(
-                              "Não foi possível excluir. Verifique se a ideia é sua."
-                            );
+                          if (!ok) setError("Não foi possível excluir. Verifique se a ideia é sua.");
                         }}
                         showActions
-                        isOwner={isOwner(idea)} 
+                        isOwner={isOwner(idea)}
                       />
                     ))}
                   </div>

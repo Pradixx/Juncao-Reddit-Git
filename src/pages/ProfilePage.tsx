@@ -6,7 +6,6 @@ import { useIdeas } from "../contexts/IdeasContext";
 
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -38,7 +37,7 @@ export default function ProfilePage() {
               <div>
                 <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Perfil</h1>
                 <p className="text-sm text-muted mt-1">
-                  Dados vêm de <code>/api/user/me</code>.
+                  Suas informações e atalhos rápidos.
                 </p>
               </div>
 
@@ -62,7 +61,7 @@ export default function ProfilePage() {
               <Card className="md:col-span-2">
                 <CardHeader>
                   <CardTitle>Informações</CardTitle>
-                  <CardDescription>Seu perfil básico.</CardDescription>
+                  <CardDescription>Seu perfil incrível.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex flex-col gap-1">
@@ -81,11 +80,6 @@ export default function ProfilePage() {
                       </Button>
                     </div>
                   </div>
-
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    <Badge variant="secondary">Token via AuthContext</Badge>
-                    <Badge variant="secondary">JWT → Ideas API</Badge>
-                  </div>
                 </CardContent>
               </Card>
 
@@ -97,7 +91,7 @@ export default function ProfilePage() {
                 <CardContent className="space-y-2">
                   <div className="text-3xl font-semibold">{total}</div>
                   <p className="text-xs text-muted">
-                    Total das suas ideias (endpoint <code>/my-ideas</code>)
+                    Total de ideias criadas por você.
                   </p>
                   <Button className="w-full" onClick={() => navigate("/ideas")}>
                     Ver ideias
