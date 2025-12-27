@@ -1,4 +1,3 @@
-// src/pages/ViewIdeaPage.tsx
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
@@ -61,7 +60,6 @@ export default function ViewIdeaPage() {
       <div className="w-full app-page-bg">
         <main className="container-app py-8">
           <div className="mx-auto w-full max-w-3xl space-y-4">
-            {/* Top */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">

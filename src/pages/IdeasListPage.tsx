@@ -19,8 +19,6 @@ import { Skeleton } from "../components/ui/skeleton";
 export default function IdeasListPage() {
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
-
-  // ✅ pega isOwner do context
   const {
     ideas,
     myIdeas,
@@ -44,7 +42,6 @@ export default function IdeasListPage() {
       params.delete("delete");
       setParams(params, { replace: true });
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const list = useMemo(() => {

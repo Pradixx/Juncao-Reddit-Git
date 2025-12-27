@@ -1,4 +1,3 @@
-// src/components/IdeaCard.tsx
 import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
@@ -13,11 +12,7 @@ type IdeaCardProps = {
   className?: string;
   onEdit?: () => void | Promise<void>;
   onDelete?: () => void | Promise<void>;
-
-  // ✅ mantém seu padrão atual
   showActions?: boolean;
-
-  // ✅ novo: controle real de permissão (front)
   isOwner?: boolean;
 };
 
@@ -61,7 +56,6 @@ export default function IdeaCard({
             Ver
           </Button>
 
-          {/* ✅ ações só aparecem se for dono */}
           {showActions && isOwner && (
             <>
               <Button
@@ -78,7 +72,6 @@ export default function IdeaCard({
           )}
         </div>
 
-        {/* opcional: dica visual */}
         {showActions && !isOwner && (
           <p className="text-xs text-muted">Somente leitura (não é sua ideia).</p>
         )}

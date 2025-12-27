@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -6,10 +6,25 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passRef = useRef<HTMLInputElement>(null);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [shake, setShake] = useState(false);
+
+  useEffect(() => {
+    emailRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (!error) return;
+    setShake(true);
+    const t = setTimeout(() => setShake(false), 400);
+    return () => clearTimeout(t);
+  }, [error]);
 
   const canSubmit = useMemo(() => {
     return email.trim().length > 0 && password.trim().length >= 8 && !submitting;
@@ -18,11 +33,25 @@ export default function LoginPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    if (!email.trim()) {
+      setError("Informe seu email.");
+      emailRef.current?.focus();
+      return;
+    }
+
+    if (password.trim().length < 8) {
+      setError("Sua senha deve ter pelo menos 8 caracteres.");
+      passRef.current?.focus();
+      return;
+    }
+
     setSubmitting(true);
     try {
       const ok = await login(email.trim(), password);
       if (!ok) {
         setError("Email ou senha inválidos.");
+        passRef.current?.focus();
         return;
       }
       navigate("/dashboard");
@@ -41,7 +70,7 @@ export default function LoginPage() {
         <h1 className="mt-4 text-3xl font-bold text-strong">Bem-vindo de volta</h1>
         <p className="mt-2 text-muted">Faça login para continuar</p>
 
-        <div className="mt-8 feature-card p-6 text-left">
+        <div className={`mt-8 feature-card p-6 text-left ${shake ? "shake" : ""}`}>
           {error && (
             <div className="alert-danger mb-4 rounded-lg px-4 py-3 text-sm">
               {error}
@@ -53,12 +82,19 @@ export default function LoginPage() {
               <label className="text-sm font-medium text-strong">Email</label>
               <div className="mt-2">
                 <input
+                  ref={emailRef}
                   className="ui-input ui-border ui-surface h-11 w-full rounded-lg px-3 text-sm ui-focus-ring"
                   placeholder="seu@email.com"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      passRef.current?.focus();
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -67,8 +103,9 @@ export default function LoginPage() {
               <label className="text-sm font-medium text-strong">Senha</label>
               <div className="mt-2">
                 <input
+                  ref={passRef}
                   className="ui-input ui-border ui-surface h-11 w-full rounded-lg px-3 text-sm ui-focus-ring"
-                  placeholder="********"
+                  placeholder="Sua senha"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

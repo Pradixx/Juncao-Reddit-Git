@@ -1,4 +1,3 @@
-// src/contexts/IdeasContext.tsx
 import {
   createContext,
   useContext,
@@ -14,7 +13,7 @@ export interface Idea {
   id: string;
   title: string;
   description: string;
-  authorId: string; // no seu back isso é o EMAIL do autor
+  authorId: string;
   createdAt: string;
 }
 
@@ -32,7 +31,6 @@ interface IdeasContextType {
 
   getIdea: (id: string) => Idea | undefined;
 
-  // ✅ helper pro front decidir UI
   isOwner: (idea?: Pick<Idea, "authorId"> | null) => boolean;
 }
 
@@ -70,7 +68,6 @@ export function IdeasProvider({ children }: { children: ReactNode }) {
       const res = await fetch(API_IDEAS, { headers: authHeaders() });
 
       if (!res.ok) {
-        // se perdeu auth, não deixa “fantasma”
         if (res.status === 401 || res.status === 403) setIdeas([]);
         return;
       }
@@ -153,7 +150,6 @@ export function IdeasProvider({ children }: { children: ReactNode }) {
           body: JSON.stringify(idea),
         });
 
-        // ✅ se 403, é “não é sua”
         if (!res.ok) return false;
 
         await refreshBoot();

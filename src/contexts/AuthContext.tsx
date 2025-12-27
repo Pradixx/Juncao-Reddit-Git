@@ -1,4 +1,3 @@
-// src/contexts/AuthContext.tsx
 import { createContext, useContext, useEffect, useMemo, useState, ReactNode, useCallback } from "react";
 
 export interface User {
@@ -72,16 +71,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return true;
   }, [fetchMe, logout]);
 
-  // ✅ Bootstrap: se tem token, garante que user está certo (1 vez)
   useEffect(() => {
     const jwt = localStorage.getItem("token");
     if (!jwt) return;
 
-    // se user está vazio ou token mudou, refaz /me
     if (!user || token !== jwt) {
       refreshMe();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const login = useCallback(async (email: string, password: string): Promise<boolean> => {

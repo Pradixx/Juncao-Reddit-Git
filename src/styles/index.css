@@ -270,3 +270,96 @@ button:focus-visible {
   50% { opacity: .9; }
   100% { opacity: .5; }
 }
+
+/* =========================
+   HERO / AUTH HELPERS
+========================= */
+.hero-bg {
+  background:
+    radial-gradient(800px 400px at 50% -10%, rgba(59, 130, 246, 0.18), transparent 60%),
+    radial-gradient(700px 350px at 90% 10%, rgba(139, 92, 246, 0.18), transparent 60%),
+    var(--bg);
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+}
+
+/* Card do Login / Register */
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+}
+
+/* =========================
+   ALERTS
+========================= */
+.alert-danger {
+  background: rgba(220, 38, 38, 0.12);
+  color: #fecaca;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+}
+
+/* =========================
+   LINKS
+========================= */
+.link-primary {
+  color: #60a5fa;
+}
+.link-primary:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+/* =========================
+   SHAKE ANIMATION (ERRO)
+========================= */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.35s ease-in-out;
+}
+
+/* =========================
+   PASSWORD STRENGTH
+========================= */
+.pw-meter {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.pw-bar {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+}
+
+.pw-bar.active.weak { background: #dc2626; }
+.pw-bar.active.medium { background: #f59e0b; }
+.pw-bar.active.strong { background: #22c55e; }
+
+.pw-hint {
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.pw-ok {
+  color: #22c55e;
+}
+
+.pw-bad {
+  color: rgba(232, 238, 252, 0.6);
+}
+
