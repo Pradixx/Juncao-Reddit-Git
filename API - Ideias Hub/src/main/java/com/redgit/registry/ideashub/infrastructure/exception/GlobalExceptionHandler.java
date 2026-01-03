@@ -105,16 +105,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        // NÃO expor detalhes internos em produção
-        // Em desenvolvimento, você pode usar ex.getMessage() para debug
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Erro interno do servidor",
-                null, // Não incluir ex.getMessage() em produção!
+                null,
                 LocalDateTime.now()
         );
 
-        // Log do erro (adicione um logger se necessário)
         System.err.println("Erro não tratado: " + ex.getMessage());
         ex.printStackTrace();
 
