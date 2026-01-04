@@ -1,5 +1,6 @@
 package com.redgit.profile.infrastructure.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -53,6 +54,7 @@ public class Profile {
     private Map<String, String> socialLinks = new HashMap<>();
 
     @Column(name = "is_public", nullable = false)
+    @JsonProperty("isPublic")
     private boolean isPublic = true;
 
     @Column(name = "created_at", nullable = false, updatable = false)

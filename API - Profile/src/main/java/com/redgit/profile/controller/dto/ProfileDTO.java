@@ -1,5 +1,6 @@
 package com.redgit.profile.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.redgit.profile.infrastructure.entities.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,10 @@ public class ProfileDTO {
     private String location;
     private String website;
     private Map<String, String> socialLinks;
+
+    @JsonProperty("isPublic")
     private boolean isPublic;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
