@@ -4,6 +4,7 @@ import com.daniel.registry.trending.dto.TrendingItemDTO;
 import com.daniel.registry.trending.service.TrendingService;
 import com.daniel.registry.trending.util.TrendingKeys;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -20,13 +21,15 @@ public class TrendingController {
     }
 
     @PostMapping("/ideas/{ideaId}/like")
-    public void like(@PathVariable long ideaId) {
+    public ResponseEntity<Void> like(@PathVariable long ideaId) {
         trendingService.bumpLike(ideaId);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/ideas/{ideaId}/score")
-    public void score(@PathVariable long ideaId, @RequestParam double delta) {
+    public ResponseEntity<Void> score(@PathVariable long ideaId, @RequestParam double delta) {
         trendingService.bumpScore(ideaId, delta);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/daily")
