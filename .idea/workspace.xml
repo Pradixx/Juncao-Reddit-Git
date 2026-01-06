@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d227fb00-2086-4eb3-b016-15800a58f003" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/API - Cadastro e Login.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/RedGitApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/AdminController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/AdminStatsDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/ChangeRoleDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/LoginRequestDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/RegisterRequestDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/ResponseDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/UpdateUserDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/UserDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/cors/CorsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/entity/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/entity/UserRole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/exception/ErrorResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/security/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/security/SecurityFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/security/UserSecurity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/service/CustomUserDetailsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/service/TokenService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/RedGitApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/exception/ErrorResponseTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/exception/GlobalExceptionHandlerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/repository/UserRepositoryTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/service/CustomUserDetailsServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/service/TokenServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/service/UserServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/API - Ideias Hub/src/main/java/com/redgit/registry/ideashub/infrastructure/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/eslint.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/postcss.config.cjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/public/vite.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/api.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/app/App.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/assets/react.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/Footer.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/Header.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/IdeaCard.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/Loader.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/ProtectedRoute.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/ui/alert.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/ui/badge.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/ui/button.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/ui/card.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/ui/input.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/ui/skeleton.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/components/ui/textarea.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/contexts/AuthContext.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/contexts/IdeasContext.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/lib/utils.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/main.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/pages/CreateIdeaPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/pages/DashboardPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/pages/EditIdeaPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/pages/ErrorPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/pages/IdeasListPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/pages/LandingPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/pages/LoginPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/pages/ProfilePage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/pages/RegisterPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/pages/ViewIdeaPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/src/styles/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/tailwind.config.cjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend - Ideas/vite.config.js" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Daniel-Macedo-dev"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Pradixx/Juncao-Reddit-Git.git",
+    "accountId": "b5b0394a-3d33-4f0e-80a8-a2b51ff9c9b6"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="37tgQDQrt6OXBgVSS0a0rdvQUW3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "feature/trending",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d227fb00-2086-4eb3-b016-15800a58f003" name="Changes" comment="" />
+      <created>1767727763815</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1767727763815</updated>
+    </task>
+    <servers />
+  </component>
+</project>
