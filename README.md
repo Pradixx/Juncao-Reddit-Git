@@ -1,93 +1,112 @@
-# Junção Reddit/Git - Modulo de Registro de Ideas
+# Junção Reddit/Git - Módulo de Perfil (API - Profile)
 
-Esta branch, `Reconfigurando-ideias`, representa uma reconfiguração arquitetural do projeto Junção Reddit/Git, focando na criação de um **Ideas Hub** (Hub de Ideias). A principal mudança é a migração do banco de dados relacional para o **MongoDB**, um banco de dados NoSQL, e a implementação de uma API RESTful para gerenciar ideias.
+Este módulo, **API - Profile**, é um microsserviço dedicado ao gerenciamento de perfis de usuário para o projeto Junção Reddit/Git. Ele permite que usuários autenticados visualizem, criem, atualizem e gerenciem seus perfis, incluindo o upload de avatares.
 
-O objetivo principal é simular a estrutura de uma plataforma social, como o Reddit, com foco inicial na construção de módulos de backend robustos e escaláveis.
+## Tecnologias Utilizadas
 
-## 💡 Foco em Aprendizado e Aperfeiçoamento
+O projeto é construído com as seguintes tecnologias principais:
 
 *   **Java 21**: Linguagem de programação.
-*   **Spring Boot 3.5.1**: Framework principal.
-*   **Spring Data MongoDB**: Para persistência de dados no MongoDB.
-*   **Spring Security**: Para autenticação e autorização via JWT.
-*   **JWT (Java-JWT)**: Para geração e validação de tokens de acesso.
-*   **MongoDB**: Banco de dados NoSQL para armazenamento de ideias.
+*   **Spring Boot 3.5.7**: Framework principal.
+*   **Spring Data JPA**: Para persistência de dados.
+*   **MySQL**: Banco de dados relacional.
+*   **Spring Security & JWT**: Para autenticação e autorização.
 *   **Maven**: Gerenciamento de dependências.
 *   **Lombok**: Redução de código boilerplate.
 *   **SpringDoc/Swagger**: Para documentação da API.
-*   **Postman (Todos os testes de requisição)**: https://documenter.getpostman.com/view/48435237/2sBXVZmtvc
 
 ## Funcionalidades Implementadas
 
-A API Ideas Hub permite o gerenciamento completo de ideias, com autenticação obrigatória via JWT para todas as operações.
+O módulo de Perfil oferece endpoints para gerenciamento privado e visualização pública de perfis:
 
-| Método | Endpoint | Descrição | Acesso |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/ideas` | Cria uma nova ideia. O autor é definido pelo token JWT. | Autenticado |
-| `GET` | `/api/ideas` | Lista todas as ideias cadastradas. | Autenticado |
-| `GET` | `/api/ideas/{id}` | Busca uma ideia específica pelo seu ID. | Autenticado |
-| `GET` | `/api/ideas/my-ideas` | Lista as ideias criadas pelo usuário autenticado. | Autenticado |
-| `GET` | `/api/ideas/author/{authorId}` | Lista as ideias criadas por um autor específico (e-mail). | Autenticado |
-| `PUT` | `/api/ideas/{id}` | Substitui completamente uma ideia existente. Requer que o usuário seja o autor. | Autenticado |
-| `PATCH` | `/api/ideas/{id}` | Atualiza parcialmente uma ideia existente. Requer que o usuário seja o autor. | Autenticado |
-| `DELETE` | `/api/ideas/{id}` | Deleta uma ideia. Requer que o usuário seja o autor. | Autenticado |
+### Endpoints Privados (Requerem JWT)
+
+| Método | Endpoint | Descrição |
+| :--- | :--- | :--- |
+| `GET` | `/api/profiles/me` | Retorna o perfil completo do usuário autenticado. |
+| `PUT` | `/api/profiles/me` | Atualiza os dados do perfil do usuário autenticado. |
+| `POST` | `/api/profiles/me/avatar` | Faz o upload de um novo avatar (imagem) para o perfil. |
+| `DELETE` | `/api/profiles/me/avatar` | Remove o avatar do perfil. |
+
+### Endpoints Públicos
+
+| Método | Endpoint | Descrição |
+| :--- | :--- | :--- |
+| `GET` | `/api/profiles/{username}` | Retorna o perfil público de um usuário, se não for privado. |
+| `GET` | `/api/profiles/{username}/avatar` | Retorna a imagem do avatar de um usuário. |
 
 ## Estrutura do Projeto
 
-O projeto segue a arquitetura de camadas, com foco na separação de responsabilidades e na integração com o MongoDB:
+O projeto segue a arquitetura de microsserviços, com foco na separação de responsabilidades:
 
 ```
-src/main/java/com/redgit/registry/ideashub/
-├── controller/
-│   ├── IdeaController.java (Endpoints da API)
-│   └── dto/ (Objetos de Transferência de Dados)
-├── infrastructure/
-│   ├── config/ (Configuração do MongoDB)
-│   ├── entities/ (Modelo de Dados: Idea.java)
-│   ├── repository/ (Interfaces de Repositório)
-│   └── security/ (Configurações de Spring Security, JWT Filter)
-└── service/ (Lógica de Negócio: IdeaService, TokenService)
+API - Profile/
+├── src/main/java/com/redgit/profile/
+│   ├── controller/
+│   │   └── ProfileController.java (Endpoints da API)
+│   ├── infrastructure/
+│   │   ├── entities/ (Modelos de Banco de Dados: Profile, User)
+│   │   ├── repository/ (Interfaces de Repositório)
+│   │   ├── security/ (Configurações de Segurança)
+│   │   └── storage/ (Serviço de Upload de Arquivos)
+│   └── service/ (Lógica de Negócio: ProfileService, TokenService)
+└── src/main/resources/
+    └── application.properties
 ```
 
-## Módulos Atuais
+## Configuração de Ambiente
 
-O projeto utiliza variáveis de ambiente e arquivos de propriedades para a configuração do banco de dados e da chave secreta do JWT.
+O módulo de Perfil utiliza o MySQL para persistência de dados e requer a chave secreta do JWT para validação de tokens.
 
-### 1. API - Cadastro e Login (Autenticação)
+### 1. Variáveis de Ambiente Necessárias
 
-Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo para a chave secreta do JWT:
+O projeto espera as seguintes variáveis de ambiente (geralmente definidas em um arquivo `.env` na raiz do projeto principal):
 
 ```dotenv
+DB_URL=jdbc:mysql://localhost:3306/mydatabase
+DB_USERNAME=myuser
+DB_PASSWORD=secret
 JWT_SECRET=3246918694727278232479912314703835454208642542872406260685881546
 ```
 
 ### 2. Arquivo de Propriedades (`application.properties`)
 
-O arquivo `src/main/resources/application.properties` importa as configurações do MongoDB e define a porta do servidor e a chave secreta do JWT.
+O arquivo `src/main/resources/application.properties` configura o Spring Boot para este módulo:
 
 ```properties
-spring.application.name=ideas-hub
+spring.application.name=profile-api
 
-# MongoDB
-spring.config.import=mongo.properties
+# JPA/Hibernate
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.jdbc.time_zone=UTC
+spring.jpa.show-sql=true
+
+# Database
+spring.datasource.url=${DB_URL:jdbc:mysql://localhost:3306/mydatabase}
+spring.datasource.username=${DB_USERNAME:myuser}
+spring.datasource.password=${DB_PASSWORD:secret}
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# Test
+spring.test.database.replace=none
 
 # Server
-server.port=8082
+server.port=8083
 
-# JWT
+# Security
 security.jwt.secret-key=${JWT_SECRET:my-secret-key-from-digito}
+
+# File Upload
+spring.servlet.multipart.enabled=true
+spring.servlet.multipart.max-file-size=2MB
+spring.servlet.multipart.max-request-size=2MB
+file.upload-dir=uploads/avatars
+
+# Logging
+logging.level.com.redgit.profile=DEBUG
 ```
-
-### 3. Configuração do MongoDB (`mongo.properties`)
-
-O arquivo `mongo.properties` (que deve ser criado em `src/main/resources/`) contém a string de conexão para o cluster MongoDB.
-
-```properties
-spring.data.mongodb.connection-string=mongodb+srv://digito:GXylmjKyw0fAVkm4@project-ideas-cluster.dcrxch1.mongodb.net/ideas-db?retryWrites=true&w=majority
-mongodb.databaseName=ideas-db
-```
-
-**Nota de Segurança**: A string de conexão fornecida é apenas para fins de aprendizado e desenvolvimento. Em produção, as credenciais devem ser gerenciadas de forma segura.
 
 ## Como Rodar o Projeto
 
@@ -95,7 +114,7 @@ mongodb.databaseName=ideas-db
 
 *   **Java Development Kit (JDK) 21** ou superior.
 *   **Maven**.
-*   **Acesso ao Cluster MongoDB** (ou um servidor MongoDB local).
+*   **Servidor MySQL** rodando.
 
 ### Passos para Execução
 
@@ -104,46 +123,50 @@ mongodb.databaseName=ideas-db
     ```bash
     git clone https://github.com/Pradixx/Juncao-Reddit-Git.git
     cd Juncao-Reddit-Git
-    git checkout Reconfigurando-ideias
+    git checkout Module-Profile
     ```
 
-2.  **Configure o ambiente:**
-    *   Crie e preencha o arquivo `.env` conforme a seção acima.
-    *   Crie e preencha o arquivo `src/main/resources/mongo.properties` conforme a seção acima.
+2.  **Navegue para o módulo:**
 
-3.  **Compile e execute a aplicação:**
+    ```bash
+    cd "API - Profile"
+    ```
+
+3.  **Configure o ambiente:**
+    *   Certifique-se de que as variáveis de ambiente necessárias estão configuradas (ou exportadas) no seu terminal.
+
+4.  **Compile e execute a aplicação:**
 
     ```bash
     ./mvnw clean install
     ./mvnw spring-boot:run
     ```
 
-A aplicação será iniciada na porta `8082`.
+A aplicação será iniciada na porta `8083`.
 
-## Exemplo de Uso (Criação de Ideia)
+## Exemplo de Uso (Atualização de Perfil)
 
-Para criar uma ideia, você precisa de um token JWT válido (obtido através de um serviço de autenticação, como o implementado na branch `Login-Register-Alpha`).
+Assumindo que você já possui um JWT válido (obtido pelo módulo de Autenticação).
 
-### 1. Criação de Ideia
+### 1. Atualizar Perfil
 
 ```bash
 # Substitua SEU_TOKEN_JWT pelo token real
-curl -X POST http://localhost:8082/api/ideas \
+curl -X PUT http://localhost:8083/api/profiles/me \
 -H "Content-Type: application/json" \
 -H "Authorization: Bearer SEU_TOKEN_JWT" \
--d '{"title": "Nova Funcionalidade", "description": "Implementar um sistema de votação nas ideias."}'
+-d '{"username": "novo_username", "bio": "Minha nova biografia", "public": true}'
 ```
 
-**Resposta de Sucesso (201 Created):**
+### 2. Upload de Avatar
 
-```json
-{
-    "id": "65b21a8c8e8d9c001f0a0b1c",
-    "title": "Nova Funcionalidade",
-    "description": "Implementar um sistema de votação nas ideias.",
-    "authorId": "email_do_usuario_do_token",
-    "createdAt": "2024-01-25T10:00:00.000"
-}
+O upload de arquivos requer o uso de `multipart/form-data`.
+
+```bash
+# Substitua SEU_TOKEN_JWT pelo token real e /caminho/para/sua/imagem.png pelo caminho do arquivo
+curl -X POST http://localhost:8083/api/profiles/me/avatar \
+-H "Authorization: Bearer SEU_TOKEN_JWT" \
+-F "file=@/caminho/para/sua/imagem.png"
 ```
 
 ## Contribuições
