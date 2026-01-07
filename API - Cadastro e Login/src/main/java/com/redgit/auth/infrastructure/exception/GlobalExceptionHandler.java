@@ -1,4 +1,4 @@
-package com.redgit.ideas.infrastructure.exception;
+package com.redgit.auth.infrastructure.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -117,10 +117,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-<<<<<<< HEAD:API - Ideias Hub/src/main/java/com/redgit/ideas/infrastructure/exception/GlobalExceptionHandler.java
-        // NÃO expor detalhes internos em produção
-=======
->>>>>>> dc123b385db9a3da8dda22b5fab7736abf95e4fa:API - Ideias Hub/src/main/java/com/redgit/registry/ideashub/infrastructure/exception/GlobalExceptionHandler.java
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Erro interno do servidor",
