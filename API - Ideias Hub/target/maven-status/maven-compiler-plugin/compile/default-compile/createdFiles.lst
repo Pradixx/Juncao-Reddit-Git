@@ -1,0 +1,4 @@
+com\redgit\ideas\infrastructure\security\SecurityConfig.class
+com\redgit\ideas\IdeasHubApplication.class
+com\redgit\ideas\service\TokenService.class
+com\redgit\ideas\infrastructure\security\SecurityFilter.class
