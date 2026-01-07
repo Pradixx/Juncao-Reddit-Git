@@ -1,4 +1,4 @@
-package com.daniel.registry.reputation_service;
+package com.daniel.registry.reputation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.daniel.registry.reputation_service;
+package com.daniel.registry.reputation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
