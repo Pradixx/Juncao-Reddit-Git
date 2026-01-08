@@ -1,9 +1,4 @@
-<<<<<<<< HEAD:API - Profile/src/main/java/com/redgit/profile/infrastructure/exception/GlobalExceptionHandler.java
 package com.redgit.profile.infrastructure.exception;
-========
-package com.redgit.auth.infrastructure.exception;
->>>>>>>> ef40270143fc8b117a308d480711776626cac10c:API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/exception/GlobalExceptionHandler.java
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;

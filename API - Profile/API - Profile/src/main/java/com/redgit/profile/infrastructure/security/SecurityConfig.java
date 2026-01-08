@@ -1,9 +1,4 @@
-<<<<<<<< HEAD:API - Profile/src/main/java/com/redgit/profile/infrastructure/security/SecurityConfig.java
 package com.redgit.profile.infrastructure.security;
-========
-package com.redgit.ideas.infrastructure.security;
->>>>>>>> ef40270143fc8b117a308d480711776626cac10c:API - Ideias Hub/src/main/java/com/redgit/ideas/infrastructure/security/SecurityConfig.java
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

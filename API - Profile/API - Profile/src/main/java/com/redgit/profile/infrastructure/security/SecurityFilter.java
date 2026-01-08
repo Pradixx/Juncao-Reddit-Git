@@ -1,13 +1,6 @@
-<<<<<<<< HEAD:API - Profile/src/main/java/com/redgit/profile/infrastructure/security/SecurityFilter.java
 package com.redgit.profile.infrastructure.security;
 
-
 import com.redgit.profile.service.TokenService;
-========
-package com.redgit.ideas.infrastructure.security;
-
-import com.redgit.ideas.service.TokenService;
->>>>>>>> ef40270143fc8b117a308d480711776626cac10c:API - Ideias Hub/src/main/java/com/redgit/ideas/infrastructure/security/SecurityFilter.java
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
