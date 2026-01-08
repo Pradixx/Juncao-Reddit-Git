@@ -5,36 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e26d42c-315b-48f0-bcc4-57c6e9fa1334" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/RedGitApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/RedGitApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/controllers/DTO/AdminStatsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/AdminStatsDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/controllers/DTO/ChangeRoleDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/ChangeRoleDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/controllers/DTO/LoginRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/LoginRequestDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/controllers/DTO/RegisterRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/RegisterRequestDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/controllers/DTO/ResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/ResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/controllers/DTO/UpdateUserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/UpdateUserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/controllers/DTO/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/DTO/UserDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/infrastructure/cors/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/cors/CorsConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/infrastructure/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/infrastructure/entity/UserRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/entity/UserRole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/infrastructure/exception/ErrorResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/exception/ErrorResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/infrastructure/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/infrastructure/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/infrastructure/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/infrastructure/security/SecurityFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/security/SecurityFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/infrastructure/security/UserSecurity.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/security/UserSecurity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/service/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/service/CustomUserDetailsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/service/TokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/service/TokenService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/digitodael/redgit/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/main/java/com/redgit/auth/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/digitodael/redgit/RedGitApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/RedGitApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/digitodael/redgit/exception/ErrorResponseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/exception/ErrorResponseTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/digitodael/redgit/exception/GlobalExceptionHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/exception/GlobalExceptionHandlerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/digitodael/redgit/repository/UserRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/repository/UserRepositoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/digitodael/redgit/service/CustomUserDetailsServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/service/CustomUserDetailsServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/digitodael/redgit/service/TokenServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/service/TokenServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/digitodael/redgit/service/UserServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/API - Cadastro e Login/src/test/java/com/redgit/auth/service/UserServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,8 +21,20 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Pradixx"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Pradixx/Juncao-Reddit-Git.git",
+    "accountId": "4e8a2eaa-c99c-4759-b40c-a4a8da4d4941"
+  }
+}]]></component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -77,12 +61,12 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Module-Login-Register",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/diegu/Documents/Programa/Java/Projetos_Pessoais/Juncao-Reddit-Git/API - Cadastro e Login"
+    "last_opened_file_path": "C:/Users/Diego Silva Prado/IdeaProjects/Projetos-Pessoais-Java/Projeto-RedGit/Juncao-Reddit-Git/API - Cadastro e Login"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.RedGitApplication">
+  <component name="RunManager" selected="Application.com.redgit.auth.RedGitApplication">
     <configuration name="RedGitApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="ms-21" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -142,14 +126,15 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.com.redgit.auth.RedGitApplication" />
       <item itemvalue="Application.RedGitApplication" />
       <item itemvalue="JUnit.ErrorResponseTest" />
       <item itemvalue="JUnit.GlobalExceptionHandlerTest" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.RedGitApplication" />
         <item itemvalue="Application.com.redgit.auth.RedGitApplication" />
+        <item itemvalue="Application.RedGitApplication" />
         <item itemvalue="JUnit.ErrorResponseTest" />
         <item itemvalue="JUnit.GlobalExceptionHandlerTest" />
       </list>
