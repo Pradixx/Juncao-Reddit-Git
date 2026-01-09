@@ -4,6 +4,7 @@ import com.redgit.auth.controllers.DTO.AdminStatsDTO;
 import com.redgit.auth.controllers.DTO.UserDTO;
 import com.redgit.auth.controllers.DTO.ChangeRoleDTO;
 import com.redgit.auth.infrastructure.entity.User;
+import com.redgit.auth.infrastructure.redis.RateLimitService;
 import com.redgit.auth.service.UserService;
 import com.redgit.auth.infrastructure.entity.UserRole;
 import jakarta.validation.Valid;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -24,6 +27,7 @@ import java.util.UUID;
 public class AdminController {
 
     private final UserService userService;
+    private final RateLimitService rateLimitService; // ⭐ NOVO
 
     @GetMapping("/users")
     public ResponseEntity<Page<UserDTO>> getAllUsers(
@@ -83,5 +87,38 @@ public class AdminController {
         stats.setTotalAdmins(userService.countByRole(UserRole.ADMIN));
         stats.setTotalRegularUsers(userService.countByRole(UserRole.USER));
         return ResponseEntity.ok(stats);
+    }
+
+    @PostMapping("/users/unblock-ratelimit")
+    public ResponseEntity<Map<String, String>> unblockUserRateLimit(
+            @RequestBody Map<String, String> request) {
+
+        String email = request.get("email");
+
+        if (email == null || email.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Email é obrigatório"));
+        }
+
+        rateLimitService.unblockUser(email);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Usuário desbloqueado com sucesso");
+        response.put("email", email);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/users/ratelimit-status")
+    public ResponseEntity<Map<String, Object>> getRateLimitStatus(
+            @RequestParam String email) {
+
+        Map<String, Object> status = new HashMap<>();
+        status.put("email", email);
+        status.put("isBlocked", rateLimitService.isBlocked(email));
+        status.put("remainingAttempts", rateLimitService.getRemainingAttempts(email));
+        status.put("blockTimeRemaining", rateLimitService.getBlockTimeRemaining(email));
+
+        return ResponseEntity.ok(status);
     }
 }
