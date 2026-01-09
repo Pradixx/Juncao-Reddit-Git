@@ -58,7 +58,13 @@ O projeto utiliza variáveis de ambiente para as credenciais do banco de dados e
 DB_URL=jdbc:mysql://localhost:3306/mydatabase
 DB_USERNAME=myuser
 DB_PASSWORD=secret
+
 JWT_SECRET=3246918694727278232479912314703835454208642542872406260685881546
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=secret
+REDIS_DB=0
 ```
 
 **Nota de Segurança**: A chave `JWT_SECRET` deve ser longa e complexa. A chave fornecida é apenas para fins de aprendizado e desenvolvimento.
@@ -89,6 +95,13 @@ server.port=8081
 
 # Security
 security.jwt.secret-key=${JWT_SECRET:my-secret-key-from-digito}
+
+# Redis Configuration
+spring.data.redis.host=${REDIS_HOST:localhost}
+spring.data.redis.port=${REDIS_PORT:6379}
+spring.data.redis.password=${REDIS_PASSWORD:}
+spring.data.redis.database=${REDIS_DB:0}
+spring.data.redis.timeout=60000
 ```
 
 ## Como Rodar o Projeto

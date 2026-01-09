@@ -66,7 +66,13 @@ O projeto espera as seguintes variáveis de ambiente (geralmente definidas em um
 DB_URL=jdbc:mysql://localhost:3306/mydatabase
 DB_USERNAME=myuser
 DB_PASSWORD=secret
+
 JWT_SECRET=3246918694727278232479912314703835454208642542872406260685881546
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=secret
+REDIS_DB=0
 ```
 
 ### 2. Arquivo de Propriedades (`application.properties`)
@@ -103,6 +109,23 @@ spring.servlet.multipart.enabled=true
 spring.servlet.multipart.max-file-size=2MB
 spring.servlet.multipart.max-request-size=2MB
 file.upload-dir=uploads/avatars
+
+# Redis Configuration
+spring.data.redis.host=${REDIS_HOST:localhost}
+spring.data.redis.port=${REDIS_PORT:6379}
+spring.data.redis.password=${REDIS_PASSWORD:}
+spring.data.redis.database=${REDIS_DB:1}
+spring.data.redis.timeout=60000
+
+# Redis Connection Pool (Jedis)
+spring.data.redis.jedis.pool.max-active=8
+spring.data.redis.jedis.pool.max-idle=8
+spring.data.redis.jedis.pool.min-idle=0
+spring.data.redis.jedis.pool.max-wait=-1ms
+
+# Redis Cache TTL (em segundos)
+cache.profile.ttl=300
+cache.avatar.ttl=600
 
 # Logging
 logging.level.com.redgit.profile=DEBUG
