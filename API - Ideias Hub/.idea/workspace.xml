@@ -5,7 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="061ff98c-ed03-4845-9880-686ee94358bc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/redis/RateLimitService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/redis/RedisConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/java/com/redgit/auth/infrastructure/redis/RedisService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../API - Profile/API - Profile/src/main/java/com/redgit/profile/infrastructure/redis/RedisConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../API - Profile/API - Profile/src/main/java/com/redgit/profile/infrastructure/redis/RedisService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../API - Cadastro e Login/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../API - Cadastro e Login/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/java/com/redgit/auth/controllers/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/java/com/redgit/auth/service/TokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/java/com/redgit/auth/service/TokenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../API - Cadastro e Login/API - Cadastro e Login/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API - Profile/API - Profile/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../API - Profile/API - Profile/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API - Profile/API - Profile/src/main/java/com/redgit/profile/service/ProfileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../API - Profile/API - Profile/src/main/java/com/redgit/profile/service/ProfileService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API - Profile/API - Profile/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../API - Profile/API - Profile/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,26 +53,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.IdeasHubApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Application.com.redgit.registry.ideashub.IdeasHubApplication.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ErrorResponseTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.IdeaControllerTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.IdeaRepositoryTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.IdeaServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TokenServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/diegu/Documents/Programa/Java/Projetos_Pessoais/Verificando Junção/Juncao-Reddit-Git/API - Ideias Hub&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.IdeasHubApplication.executor": "Run",
+    "Application.com.redgit.registry.ideashub.IdeasHubApplication.executor": "Run",
+    "JUnit.ErrorResponseTest.executor": "Run",
+    "JUnit.IdeaControllerTest.executor": "Run",
+    "JUnit.IdeaRepositoryTest.executor": "Run",
+    "JUnit.IdeaServiceTest.executor": "Run",
+    "JUnit.TokenServiceTest.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Implementing-Redis",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/diegu/Documents/Programa/Java/Projetos_Pessoais/Verificando Junção/Juncao-Reddit-Git/API - Ideias Hub",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.IdeasHubApplication">
     <configuration name="IdeasHubApplication" type="Application" factoryName="Application" temporary="true">
       <option name="ALTERNATIVE_JRE_PATH" value="ms-21" />

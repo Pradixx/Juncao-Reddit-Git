@@ -2,9 +2,12 @@ package com.redgit.profile.service;
 
 import com.redgit.profile.controller.dto.UpdateProfileDTO;
 import com.redgit.profile.infrastructure.entities.Profile;
+import com.redgit.profile.infrastructure.redis.RedisService;
 import com.redgit.profile.infrastructure.repository.ProfileRepository;
 import com.redgit.profile.infrastructure.storage.FileStorageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,27 +16,67 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final FileStorageService fileStorageService;
+    private final RedisService redisService;
+
+    @Value("${cache.profile.ttl:300}")
+    private long profileCacheTTL;
+
+    public Profile getOrCreateProfile(UUID userId, String email) {
+        return profileRepository.findByUserId(userId)
+                .orElseGet(() -> createProfile(userId, email));
+    }
 
     public Profile findByUserId(UUID userId) {
-        return profileRepository.findByUserId(userId)
+        String cacheKey = "user:" + userId.toString();
+        Profile cached = redisService.get(cacheKey, Profile.class);
+
+        if (cached != null) {
+            log.debug("Cache HIT - Perfil userId: {}", userId);
+            return cached;
+        }
+
+        log.debug("Cache MISS - Buscando do banco: {}", userId);
+
+        Profile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Perfil não encontrado"
                 ));
+
+        redisService.set(cacheKey, profile, profileCacheTTL);
+        log.debug("Perfil cacheado: {} (TTL: {}s)", userId, profileCacheTTL);
+
+        return profile;
     }
 
     public Profile findByUsername(String username) {
-        return profileRepository.findByUsername(username)
+        String cacheKey = "public:" + username;
+        Profile cached = redisService.get(cacheKey, Profile.class);
+
+        if (cached != null) {
+            log.debug("Cache HIT - Perfil público: {}", username);
+            return cached;
+        }
+
+        log.debug("Cache MISS - Buscando do banco: {}", username);
+
+        Profile profile = profileRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Perfil não encontrado"
                 ));
+
+        redisService.set(cacheKey, profile, profileCacheTTL);
+        log.debug("Perfil público cacheado: {} (TTL: {}s)", username, profileCacheTTL);
+
+        return profile;
     }
 
     @Transactional
@@ -58,12 +101,6 @@ public class ProfileService {
     }
 
     @Transactional
-    public Profile getOrCreateProfile(UUID userId, String email) {
-        return profileRepository.findByUserId(userId)
-                .orElseGet(() -> createProfile(userId, email));
-    }
-
-    @Transactional
     public Profile updateProfile(UUID userId, UpdateProfileDTO dto) {
         Profile profile = findByUserId(userId);
 
@@ -74,6 +111,12 @@ public class ProfileService {
                         "Username já está em uso"
                 );
             }
+
+            if (profile.getUsername() != null) {
+                redisService.invalidateProfile(profile.getUsername());
+                log.info("Cache invalidado para username antigo: {}", profile.getUsername());
+            }
+
             profile.setUsername(dto.getUsername());
         }
 
@@ -102,7 +145,15 @@ public class ProfileService {
         }
 
         profile.updateTimestamp();
-        return profileRepository.save(profile);
+        Profile savedProfile = profileRepository.save(profile);
+
+        redisService.invalidateByUserId(userId.toString());
+        if (savedProfile.getUsername() != null) {
+            redisService.invalidateProfile(savedProfile.getUsername());
+        }
+        log.info("Cache invalidado após atualização de perfil: userId={}", userId);
+
+        return savedProfile;
     }
 
     @Transactional
@@ -117,7 +168,15 @@ public class ProfileService {
         profile.setAvatarPath(filename);
         profile.updateTimestamp();
 
-        return profileRepository.save(profile);
+        Profile savedProfile = profileRepository.save(profile);
+
+        redisService.invalidateByUserId(userId.toString());
+        if (savedProfile.getUsername() != null) {
+            redisService.invalidateProfile(savedProfile.getUsername());
+        }
+        log.info("Cache invalidado após upload de avatar: userId={}", userId);
+
+        return savedProfile;
     }
 
     @Transactional
@@ -136,6 +195,12 @@ public class ProfileService {
         profile.setAvatarPath(null);
         profile.updateTimestamp();
         profileRepository.save(profile);
+
+        redisService.invalidateByUserId(userId.toString());
+        if (profile.getUsername() != null) {
+            redisService.invalidateProfile(profile.getUsername());
+        }
+        log.info("Cache invalidado após remoção de avatar: userId={}", userId);
     }
 
     private String generateUsernameFromEmail(String email) {

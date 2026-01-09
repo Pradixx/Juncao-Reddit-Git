@@ -1,11 +1,62 @@
 services:
+  
   mysql:
-    container_name: 'mysql-RedGit'
-    image: 'mysql:latest'
+    image: mysql:latest
+    container_name: redgit-mysql
+    restart: unless-stopped
     environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: secret
     ports:
-      - '3306:3306'
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - redgit-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: redgit-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - redgit-network
+    command: redis-server --appendonly yes --requirepass ""
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redgit-redis-commander
+    restart: unless-stopped
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8085:8081"
+    networks:
+      - redgit-network
+    depends_on:
+      - redis
+
+networks:
+  redgit-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
